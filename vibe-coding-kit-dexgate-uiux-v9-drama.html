@@ -146,6 +146,9 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
   transform:translate(-50%,-50%);background:rgba(0,229,255,.6);box-shadow:0 0 12px rgba(0,229,255,.8);
   animation:tapRip .45s ease-out forwards;z-index:6;}
 @keyframes tapRip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4);}100%{opacity:0;transform:translate(-50%,-50%) scale(4);}}
+/* --- Phase 5: idle breathing --- */
+.dexPanel,.trophies{animation:cardBreath 4s ease-in-out infinite;}
+@keyframes cardBreath{0%,100%{box-shadow:0 0 0 rgba(0,229,255,0);}50%{box-shadow:0 0 14px rgba(0,229,255,.12);}}
 </style>
 </head>
 <body>
