@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Coding Kit - Ultimate Chromebook Welcome Academy (Gamified Edition)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberBlack: '#0B0C10',
+            pinkAccent: '#FF007F',
+            cyanAccent: '#00E5FF',
+            violetAccent: '#7209B7',
+            crimsonAccent: '#E63946'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Theme transitions */
+    body {
+      background-color: #0B0C10;
+      color: #E2E8F0;
+      transition: background-color 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
+    }
+
+    /* Custom thin scrollbars in Neon Cyan */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0C10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00E5FF;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FF007F;
+    }
+
+    /* Lava Flow Keyframes for XP Bar */
+    @keyframes lavaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .lava-bar {
+      background: linear-gradient(90deg, #E63946, #FF007F, #7209B7, #E63946);
+      background-size: 300% 300%;
+      animation: lavaFlow 4s ease infinite;
+    }
+
+    /* Thermal Overclock white-hot plasma styling (Secret #2) */
+    body.overclocked {
+      background-color: #111116 !important;
+    }
+    .overclocked .panel-card {
+      border-color: #FFFFFF !important;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
+    }
+    .overclocked .text-glow {
+      text-shadow: 0 0 8px #FFFFFF, 0 0 15px #E63946;
+    }
+    .overclocked .lava-bar {
+      background: linear-gradient(90deg, #FFFFFF, #E63946, #FFFFFF) !important;
+      background-size: 200% 200% !important;
+      animation: lavaFlow 1.5s linear infinite !important;
+    }
+
+    /* Cosmic Silk Palette Shift styling (Secret #5) */
+    body.cosmic-silk {
+      background-color: #1E1E24 !important;
+      color: #EBD4CB !important;
+    }
+    .cosmic-silk .panel-card {
+      border-color: #E85D04 !important;
+      background-color: #121214 !important;
+    }
+    .cosmic-silk .text-glow {
+      text-shadow: 0 0 8px #E85D04;
+    }
+    .cosmic-silk .lava-bar {
+      background: linear-gradient(90deg, #E85D04, #F77F00, #FCBF49, #E85D04) !important;
+    }
+
+    /* Chromatic Aberration Glitch Animation (Secret #12) */
+    @keyframes chromaticGlitch {
+      0% { text-shadow: 2px -1px 0 #FF007F, -2px 1px 0 #00E5FF; transform: translate(1px, -1px); }
+      20% { text-shadow: -2px 1px 0 #FF007F, 2px -1px 0 #00E5FF; transform: translate(-1px, 1px); }
+      40% { text-shadow: 1px 2px 0 #FF007F, -1px -2px 0 #00E5FF; transform: translate(0px, 0px); }
+      60% { text-shadow: -1px -2px 0 #FF007F, 1px 2px 0 #00E5FF; transform: translate(1px, 2px); }
+      80% { text-shadow: 2px -1px 0 #FF007F, -2px 1px 0 #00E5FF; transform: translate(-1px, -2px); }
+      100% { text-shadow: -2px 2px 0 #FF007F, 2px -2px 0 #00E5FF; transform: translate(0px, 0px); }
+    }
+    .glitch-active .glitch-target {
+      animation: chromaticGlitch 0.15s infinite;
+    }
+
+    /* Screen shake keyframes */
+    @keyframes screenShake {
+      0% { transform: translate(0, 0); }
+      10% { transform: translate(-3px, 2px); }
+      20% { transform: translate(3px, -2px); }
+      30% { transform: translate(-2px, -3px); }
+      40% { transform: translate(2px, 3px); }
+      50% { transform: translate(-3px, 1px); }
+      60% { transform: translate(3px, -1px); }
+      70% { transform: translate(-1px, -2px); }
+      80% { transform: translate(2px, 2px); }
+      90% { transform: translate(-2px, -1px); }
+      100% { transform: translate(0, 0); }
+    }
+    .shake-active {
+      animation: screenShake 0.4s ease-out;
+    }
+
+    /* Elastic hover bounce (Secret #10) */
+    .elastic-tab {
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .elastic-tab:hover {
+      transform: rotate(3deg) scale(1.05);
+    }
+
+    /* Interactive tabs indicator line */
+    .tab-indicator {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-cyberBlack text-slate-200 min-h-screen flex flex-col">
+
+  <!-- THE STATS HEADER BAR (Sticky, 0% CLS) -->
+  <header id="statsHeader" class="sticky top-0 z-50 w-full bg-cyberBlack/95 border-b border-slate-800 backdrop-blur-md px-4 py-3 flex flex-wrap items-center justify-between transition-colors duration-200">
+    <div class="flex items-center space-x-4">
+      <!-- Double click title customization (Secret #17) -->
+      <div id="titleContainer" class="cursor-pointer group select-none">
+        <h1 id="appTitle" class="text-lg md:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+          <span class="glitch-target text-glow">Vibe Coding Kit</span>
+          <span class="hidden sm:inline-block text-xs px-2 py-0.5 rounded bg-slate-800 text-cyanAccent font-mono uppercase tracking-widest border border-slate-700">Chromebook Welcome Academy</span>
+        </h1>
+        <input id="titleInput" type="text" class="hidden text-lg md:text-xl font-bold tracking-tight bg-slate-900 border border-cyanAccent rounded px-2 py-0.5 text-white focus:outline-none focus:ring-1 focus:ring-cyanAccent" value="Vibe Coding Kit">
+      </div>
+      
+      <!-- Utility Icon for Glitch (Secret #12) -->
+      <button id="glitchTrigger" class="text-slate-500 hover:text-cyanAccent transition-colors p-1" title="Trigger Diagnostic System Glitch">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex items-center space-x-6 mt-2 sm:mt-0">
+      <!-- Badges / Achievements Panel -->
+      <div id="badgeTray" class="flex items-center space-x-2">
+        <!-- Badges will be generated here -->
+      </div>
+
+      <!-- Live VP & Level Counters -->
+      <div class="flex items-center space-x-4 font-mono">
+        <div class="text-sm">
+          <span class="text-slate-400">LEVEL:</span>
+          <span id="levelCounter" class="text-pinkAccent font-bold text-base">1</span>
+        </div>
+        <div class="text-sm">
+          <span class="text-slate-400">VP:</span>
+          <span id="vpCounter" class="text-cyanAccent font-bold text-base">0</span>
+        </div>
+      </div>
+
+      <!-- Molten Lava Flow XP Bar -->
+      <div class="w-32 md:w-48 bg-slate-800 rounded-full h-3.5 relative overflow-hidden border border-slate-700">
+        <div id="xpBar" class="lava-bar h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- WORKSPACE PANELS -->
+  <main id="mainGrid" class="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
+    
+    <!-- LEFT PANEL: Sandbox Minigames, Dexter's Sanctuary & Trophy Hall (lg:col-span-4) -->
+    <section class="lg:col-span-4 flex flex-col space-y-4">
+      
+      <!-- MINIGAME #1: Gravity Gauntlet Sandbox (Canvas) -->
+      <div class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4 flex flex-col">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-md font-bold text-white tracking-wider uppercase flex items-center gap-1.5 font-mono">
+            <span class="w-2.5 h-2.5 rounded-full bg-pinkAccent"></span>
+            Minigame 1: Gravity Gauntlet
+          </h2>
+          <span class="text-xs text-slate-400 font-mono" id="particleCounter">Active Nodes: 0 / 1000</span>
+        </div>
+        
+        <p class="text-xs text-slate-400 mb-3">
+          Click and drag inside the viewport to launch fire particles. <span class="text-cyanAccent">Hold click</span> to manifest a gravity attractor field. Spawning feeds Vibe Points.
+        </p>
+
+        <!-- Dynamic canvas container -->
+        <div class="relative w-full aspect-video bg-slate-950 border border-slate-850 rounded overflow-hidden cursor-crosshair">
+          <canvas id="sandboxCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+          
+          <!-- In-canvas instructions -->
+          <div id="canvasOverlay" class="absolute inset-0 flex flex-col justify-center items-center text-center p-4 pointer-events-none select-none bg-slate-950/70 transition-opacity duration-300">
+            <span class="text-cyanAccent font-mono text-sm tracking-wider uppercase animate-pulse">Gauntlet Sandbox Active</span>
+            <span class="text-[10px] text-slate-500 mt-1">Spawning = 1 VP. Pull >100 nodes for a Supernova (+500 VP).</span>
+          </div>
+
+          <!-- Secret #6 Gravity Inversion status indicator -->
+          <div id="gravityModeIndicator" class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent text-[10px] font-mono border border-cyanAccent/20">
+            GRAVITY: INWARD
+          </div>
+
+          <!-- Double click notifier -->
+          <div id="canvasNotice" class="absolute top-2 right-2 px-2 py-0.5 rounded bg-pinkAccent/90 text-white text-[9px] font-mono hidden uppercase">
+            Repulsion Inverted!
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-2 text-[10px] text-slate-500 font-mono">
+          <span>Click to Toggle Sound (Speed Threshold)</span>
+          <button id="soundToggle" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 hover:scale-[1.03] active:scale-[0.98]">
+            Sound: OFF
+          </button>
+        </div>
+      </div>
+
+      <!-- MINIGAME #2: Syntax Shooter (Level 3 Unlockable Panel) -->
+      <div id="minigame2Container" class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4 flex flex-col relative overflow-hidden transition-all duration-300">
+        <!-- Lock Shield for Level 3 -->
+        <div id="minigame2Lock" class="absolute inset-0 bg-slate-950/90 flex flex-col justify-center items-center text-center p-4 z-10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pinkAccent animate-bounce mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <span class="text-sm font-bold text-white tracking-widest uppercase">Syntax Shooter Locked</span>
+          <span class="text-xs text-slate-400 mt-1">Requires Level 3 (1,500 VP) to initialize reflex matrix.</span>
+        </div>
+
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-md font-bold text-white tracking-wider uppercase flex items-center gap-1.5 font-mono">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyanAccent"></span>
+            Minigame 2: Syntax Shooter
+          </h2>
+          <div class="flex space-x-2 font-mono text-xs">
+            <span id="shooterTimer" class="text-pinkAccent font-bold">30s</span>
+            <span id="shooterScore" class="text-cyanAccent font-bold">0 VP</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-400 mb-3">
+          Debug descending syntax blocks by clicking them before they breach container boundaries. Earn combo multipliers!
+        </p>
+
+        <!-- Shooter Game Arena -->
+        <div id="shooterArena" class="relative w-full h-44 bg-slate-950 border border-slate-800 rounded overflow-hidden">
+          <!-- Game Start / Restart state screens -->
+          <div id="shooterMenu" class="absolute inset-0 flex flex-col justify-center items-center bg-slate-950/85 text-center p-4 z-20">
+            <button id="startShooterBtn" class="px-4 py-1.5 rounded bg-pinkAccent hover:bg-pinkAccent/80 text-white font-mono text-xs uppercase tracking-wider transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] border border-pinkAccent/20">
+              Initialize Reflex Sequence
+            </button>
+            <span id="shooterHighscoreText" class="text-[10px] text-slate-500 mt-2 font-mono">Best Run: 0 VP</span>
+          </div>
+
+          <!-- Active Blocks container -->
+          <div id="shooterArenaBlocks" class="absolute inset-0 pointer-events-auto"></div>
+
+          <!-- Hit / Combo indicator overlay -->
+          <div id="shooterComboOverlay" class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400 pointer-events-none">
+            COMBO: <span id="shooterComboVal" class="text-cyanAccent font-bold">x1</span>
+          </div>
+
+          <!-- Bottom Warning Line -->
+          <div class="absolute bottom-0 inset-x-0 h-1 bg-crimsonAccent/30 border-t border-crimsonAccent/40 pointer-events-none"></div>
+        </div>
+      </div>
+
+      <!-- TROPHY HALL -->
+      <div class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4">
+        <h2 class="text-md font-bold text-white tracking-wider uppercase flex items-center gap-1.5 font-mono mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-pinkAccent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+          </svg>
+          Trophy Academy & Achievements
+        </h2>
+        <div id="trophyGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <!-- Trophies will be generated dynamically -->
+        </div>
+
+        <!-- Trophy shadow trail toggle (Secret #18) -->
+        <div id="shadowTrailToggleContainer" class="hidden mt-3 p-2 rounded bg-slate-900 border border-slate-800 text-xs font-mono flex items-center justify-between">
+          <span class="text-slate-400">Unlock: Hyper-Long Canvas Trails (+400%)</span>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="checkbox" id="shadowTrailCheckbox" class="sr-only peer">
+            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyanAccent peer-checked:after:bg-cyberBlack"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- DEXTER'S SANCTUARY (Sanctuary image card using local PNGs) -->
+      <div class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4 relative overflow-hidden">
+        <h2 class="text-md font-bold text-white tracking-wider uppercase flex items-center gap-1.5 font-mono mb-2">
+          <span class="text-yellow-500">⚜</span>
+          DexGPT's Sanctuary
+        </h2>
+        
+        <div class="flex items-start space-x-3">
+          <!-- Sanctuary Image targeting local PNG -->
+          <div class="w-16 h-16 flex-shrink-0 bg-slate-950 border border-slate-800 rounded p-1 flex items-center justify-center overflow-hidden">
+            <img id="sanctuaryAvatar" class="w-full h-full object-cover rounded" alt="Dexter Sanctuary">
+          </div>
+
+          <div class="flex-grow">
+            <div class="text-xs font-bold text-white">Dexter (DexGPT)</div>
+            <div class="text-[9px] text-yellow-500/80 font-mono tracking-wide uppercase">furious little stinkweasel</div>
+            <p class="text-[10px] text-slate-400 mt-1 leading-normal">
+              Dexter is a real dog with floppy ears down. Sarcastic, precise, and aloof. He serves as DexGPT, the offline diagnostic guide assistant.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3 flex justify-between items-center bg-slate-950/50 p-1.5 rounded border border-slate-800">
+          <span class="text-[10px] text-slate-500 font-mono">Status: Observing Tranquility</span>
+          <button id="petDexterBtn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white font-mono text-[10px] border border-slate-700 transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]">
+            Meditate beside DexGPT
+          </button>
+        </div>
+        <p id="petDexterMsg" class="text-[10px] text-cyanAccent mt-1 font-mono italic hidden text-center"></p>
+      </div>
+
+    </section>
+
+    <!-- CENTER PANEL: Primary Tabbed Dynamic Information Module (lg:col-span-5) -->
+    <section class="lg:col-span-5 flex flex-col space-y-4">
+      
+      <div class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg flex flex-col flex-grow">
+        
+        <!-- Sliding tab header layout (0% CLS) -->
+        <div class="relative flex border-b border-slate-800 overflow-x-auto bg-slate-950/80 select-none">
+          
+          <!-- Slider line indicator -->
+          <div id="tabIndicator" class="absolute bottom-0 h-0.5 bg-cyanAccent tab-indicator" style="width: 0px; left: 0px;"></div>
+
+          <button onclick="switchTab('welcome')" id="tabBtn-welcome" class="px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase border-r border-slate-800 text-cyanAccent bg-slate-900/20 whitespace-nowrap focus:outline-none transition-colors">
+            Start
+          </button>
+          
+          <button onclick="switchTab('tooling')" id="tabBtn-tooling" class="px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase border-r border-slate-800 text-slate-400 whitespace-nowrap focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-1">
+            <span class="text-[9px]">L2</span> Tooling Matrix
+          </button>
+          
+          <button onclick="switchTab('pricing')" id="tabBtn-pricing" class="px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase border-r border-slate-800 text-slate-400 whitespace-nowrap focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-1">
+            <span class="text-[9px]">L4</span> Pricing Forge
+          </button>
+
+          <button onclick="switchTab('projects-a')" id="tabBtn-projects-a" class="px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase border-r border-slate-800 text-slate-400 whitespace-nowrap focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-1">
+            <span class="text-[9px]">L5</span> Projects (Beginner)
+          </button>
+          
+          <!-- Secret #10 Elastic Transform Trigger on Hover -->
+          <button onclick="switchTab('linux-cli')" id="tabBtn-linux-cli" class="elastic-tab px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase border-r border-slate-800 text-slate-400 whitespace-nowrap focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-1">
+            <span class="text-[9px]">L6</span> Linux CLI
+          </button>
+          
+          <button onclick="switchTab('projects-b')" id="tabBtn-projects-b" class="px-3 py-2.5 text-xs font-mono font-semibold tracking-wider uppercase text-slate-400 whitespace-nowrap focus:outline-none transition-colors disabled:opacity-50 flex items-center gap-1">
+            <span class="text-[9px]">L7</span> Projects (Pro)
+          </button>
+        </div>
+
+        <!-- Scrollable content box -->
+        <div id="tabContentPane" class="p-4 flex-grow overflow-y-auto max-h-[70vh] bg-slate-900/10">
+          
+          <!-- TAB 1: WELCOME & GETTING STARTED -->
+          <div id="tabPane-welcome" class="space-y-4">
+            <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+              <h3 class="text-sm font-bold text-white mb-1 tracking-wide uppercase font-mono text-glow">Academy Initialization</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Welcome to the Vibe Coding Kit Academy. This environment trains you in pure client-side execution, bypassing local compiler constraints and utilizing visual modeling, browser tools, and natural interfaces.
+              </p>
+            </div>
+
+            <div class="space-y-2">
+              <h4 class="text-xs font-bold text-white tracking-widest uppercase font-mono">Unlock Milestones:</h4>
+              <ul class="space-y-1.5 font-mono text-[11px] text-slate-400">
+                <li class="flex items-center gap-2"><span class="text-cyanAccent">✔</span> Level 1 (0 VP): Gauntlet Sandbox & Trophy Hall</li>
+                <li class="flex items-center gap-2" id="milestone-l2"><span class="text-slate-600">Locked</span> Level 2 (500 VP): Tooling Matrix Tab</li>
+                <li class="flex items-center gap-2" id="milestone-l3"><span class="text-slate-600">Locked</span> Level 3 (1,500 VP): Syntax Shooter Panel</li>
+                <li class="flex items-center gap-2" id="milestone-l4"><span class="text-slate-600">Locked</span> Level 4 (3,000 VP): Ecosystem Pricing Forge</li>
+                <li class="flex items-center gap-2" id="milestone-l5"><span class="text-slate-600">Locked</span> Level 5 (5,000 VP): Absolute Beginner Project Vault</li>
+                <li class="flex items-center gap-2" id="milestone-l6"><span class="text-slate-600">Locked</span> Level 6 (7,500 VP): Linux CLI Mastery Zone</li>
+                <li class="flex items-center gap-2" id="milestone-l7"><span class="text-slate-600">Locked</span> Level 7 (10,000 VP): Next-Step Pro Developer Vault</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2 p-3 bg-slate-950/60 border border-slate-800 rounded">
+              <h4 class="text-xs font-bold text-pinkAccent tracking-widest uppercase font-mono">Manual Diagnostics</h4>
+              <p class="text-[11px] text-slate-400">
+                To jump-start progression, engage with the Gravity Gauntlet Sandbox on the left. Moving the mouse spawns particles which transfer immediate energy nodes as Vibe Points into the state engine.
+              </p>
+            </div>
+          </div>
+
+          <!-- TAB 2: ZERO-FRICTION TOOLING MATRIX -->
+          <div id="tabPane-tooling" class="hidden space-y-4">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider text-glow">The Zero-Friction Tooling Matrix</h3>
+            <p class="text-xs text-slate-400 leading-normal">
+              To write code on low-compute machines with zero setup, use cloud environments and in-browser editors. These platforms require no local libraries, build systems, or compiler engines:
+            </p>
+            
+            <div class="space-y-3">
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded hover:border-slate-700 transition-colors">
+                <h4 class="text-xs font-bold text-white font-mono uppercase tracking-wider">Project IDX (by Google)</h4>
+                <p class="text-[11px] text-slate-400 mt-1">
+                  Full cloud-based editor running virtual machines in the cloud. Integrates compiler, git pipeline, and browser previews with single-click setup templates for Angular, React, and Flutter. Includes built-in AI workspace assistance.
+                </p>
+              </div>
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded hover:border-slate-700 transition-colors">
+                <h4 class="text-xs font-bold text-white font-mono uppercase tracking-wider">CodePen</h4>
+                <p class="text-[11px] text-slate-400 mt-1">
+                  In-browser sandbox for writing HTML, CSS, and Javascript. Supports real-time layout rendering, package embedding via JS modules, and templates. Excellent for rapid frontend UI experiments and visual demonstrations without local directories.
+                </p>
+              </div>
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded hover:border-slate-700 transition-colors">
+                <h4 class="text-xs font-bold text-white font-mono uppercase tracking-wider">StackBlitz</h4>
+                <p class="text-[11px] text-slate-400 mt-1">
+                  Runs complete WebContainers directly inside your browser. Allows NodeJS, server processes, Vite build engines, and npm installs to execute locally in the browser sandbox without installing a physical CLI toolchain on the OS.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: ECOSYSTEM PRICING FORGE -->
+          <div id="tabPane-pricing" class="hidden space-y-4">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider text-glow">Ecosystem Pricing Forge</h3>
+            <p class="text-xs text-slate-400 leading-normal">
+              Accurate, comprehensive subscription tiers and capability bounds for AI assistants as of 2026:
+            </p>
+
+            <div class="space-y-3 font-mono text-xs">
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded flex flex-col space-y-1">
+                <div class="flex justify-between items-center text-white font-bold">
+                  <span>Cursor AI</span>
+                  <span class="text-cyanAccent">Free / $20 / $60</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  <strong>Tiers:</strong> Hobby Free (150 fast uses/mo), Pro $20/mo ($16/mo annual, 500 fast uses/mo + unlimited slow/queue), Pro+ $60/mo. Features multi-file codebase indexing, Composer agentic multi-file loops, and custom context file injections.
+                </p>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded flex flex-col space-y-1">
+                <div class="flex justify-between items-center text-white font-bold">
+                  <span>v0 by Vercel</span>
+                  <span class="text-cyanAccent">Free / $20 / $30</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  <strong>Tiers:</strong> Free ($5/mo credits, ~7 queries/day), Premium $20/mo (adds $20 credit pool + 20% discount on overages), Enterprise/Team $30/user/mo. Premium Tier unlocks direct Figma designs imports, private project sharing, and deployment mocks on Vercel Edge.
+                </p>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded flex flex-col space-y-1">
+                <div class="flex justify-between items-center text-white font-bold">
+                  <span>Bolt.new (StackBlitz)</span>
+                  <span class="text-cyanAccent">Free / $25</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  <strong>Tiers:</strong> Free (1M tokens/mo with 300k daily cap), Pro $25/mo ($22.50/mo annual). Pro features 10M tokens/mo with roll-over, direct GitHub synchronization, and deploy integrations for Netlify, Vercel, and Cloudflare Pages.
+                </p>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded flex flex-col space-y-1">
+                <div class="flex justify-between items-center text-white font-bold">
+                  <span>GitHub Copilot</span>
+                  <span class="text-cyanAccent">Free / $10 / $39</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  <strong>Tiers:</strong> Copilot Individual $10/mo, Enterprise $39/mo. Features inline autocomplete and multi-file context tracking. Agentic loops consume tokens from a standard monthly pool ($10 worth on Individual). Free tier available for students and maintainers.
+                </p>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded flex flex-col space-y-1">
+                <div class="flex justify-between items-center text-white font-bold">
+                  <span>Google AI Studio</span>
+                  <span class="text-cyanAccent">Free Tier (Pay-As-You-Go additions)</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  <strong>Tiers:</strong> Free Developer Tier (rate-limited requests) and Pay-As-You-Go. Provides direct workspace settings to configure system prompts using Gemini models without a flat subscription fee. Ideal for building raw tools directly.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: ABSOLUTE BEGINNER PROJECT VAULT -->
+          <div id="tabPane-projects-a" class="hidden space-y-4">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider text-glow">Absolute Beginner Project Vault</h3>
+            <p class="text-xs text-slate-400">
+              A catalog of 20 zero-jargon programming projects designed to build basic structure and interface controls:
+            </p>
+
+            <div id="beginnerProjectsList" class="space-y-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- TAB 5: LINUX CLI MASTERY ZONE -->
+          <div id="tabPane-linux-cli" class="hidden space-y-4">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider text-glow">Linux CLI Mastery Zone</h3>
+            <p class="text-xs text-slate-400 leading-normal">
+              Chromebooks feature a built-in virtualized Debian Linux environment called Crostini. Use these instructions and exact execution sequences inside the terminal window to build local servers and node applications:
+            </p>
+
+            <div class="space-y-3 text-xs font-mono">
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-1">1. Activating Crostini Environment</h4>
+                <p class="text-[11px] text-slate-400 leading-normal">
+                  Open ChromeOS Settings &rarr; Developers &rarr; Linux development environment. Click "Turn On", allocate at least 10GB of storage space, and click "Install". The system will open a terminal shell.
+                </p>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-1">2. Upgrading Packages</h4>
+                <p class="text-[11px] text-slate-400 leading-normal">
+                  Synchronize repository indices and run full upgrades:
+                </p>
+                <pre class="bg-black/80 text-cyanAccent p-2 rounded mt-2 border border-slate-850 overflow-x-auto text-[10px] select-all">sudo apt update && sudo apt dist-upgrade -y</pre>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-1">3. Installing Developer Tools</h4>
+                <p class="text-[11px] text-slate-400 leading-normal">
+                  Install compilation components, curl, and git Version Control:
+                </p>
+                <pre class="bg-black/80 text-cyanAccent p-2 rounded mt-2 border border-slate-850 overflow-x-auto text-[10px] select-all">sudo apt install -y git curl build-essential</pre>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-1">4. Installing NodeJS Node Runtime</h4>
+                <p class="text-[11px] text-slate-400 leading-normal">
+                  Download package repositories and install Node version 20:
+                </p>
+                <pre class="bg-black/80 text-cyanAccent p-2 rounded mt-2 border border-slate-855 overflow-x-auto text-[10px] select-all">curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install -y nodejs</pre>
+              </div>
+
+              <div class="p-3 border border-slate-800 bg-slate-950/40 rounded">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-1">5. Operating File System Bridge</h4>
+                <p class="text-[11px] text-slate-400 leading-normal">
+                  Open ChromeOS Files app &rarr; Right-click any directory &rarr; Click "Share with Linux". Shared folders map inside the Linux shell at:
+                </p>
+                <pre class="bg-black/80 text-cyanAccent p-2 rounded mt-2 border border-slate-850 overflow-x-auto text-[10px]">/mnt/chromeos/MyFiles/</pre>
+                <p class="text-[10px] text-slate-500 mt-1">
+                  Copy workspace directories to standard containers: `cp -r "/mnt/chromeos/MyFiles/welcome to vibe coding" ~/vibe-coding-kit`
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 6: NEXT-STEP PRO DEVELOPER VAULT -->
+          <div id="tabPane-projects-b" class="hidden space-y-4">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider text-glow">Next-Step Pro Developer Vault</h3>
+            <p class="text-xs text-slate-400">
+              A catalog of 20 advanced conceptual tracks detailing structural, algorithmic, and engineering frameworks:
+            </p>
+
+            <div id="proProjectsList" class="space-y-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: DexGPT Active Guide Widget & Notes Sandbox (lg:col-span-3) -->
+    <section class="lg:col-span-3 flex flex-col space-y-4">
+      
+      <!-- DexGPT ACTIVE GUIDE WIDGET -->
+      <div id="dexterWidget" class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4 flex flex-col transition-all duration-200">
+        <div class="flex items-center space-x-2 pb-2 border-b border-slate-800 mb-3">
+          <span class="w-2.5 h-2.5 rounded-full bg-cyanAccent animate-pulse"></span>
+          <span class="text-xs font-bold text-white font-mono tracking-widest uppercase">DexGPT (Guide)</span>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div id="dexterImageContainer" class="w-32 h-32 bg-slate-950 border border-slate-800 rounded p-1 mb-3 flex items-center justify-center overflow-hidden">
+            <img id="dexterAvatar" alt="DexGPT" class="w-full h-full object-cover transition-opacity duration-300">
+          </div>
+
+          <!-- Dialogue bubble -->
+          <div class="relative w-full bg-slate-950 border border-slate-800 rounded p-3 text-xs leading-normal">
+            <div class="absolute left-1/2 -top-2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-slate-800"></div>
+            <p id="dexterBubbleText" class="text-slate-300 font-mono text-[11px]">
+              System active. Awaiting human input...
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES SANDBOX & WPM GAUGE (Secret #9) -->
+      <div class="panel-card bg-slate-900/40 border border-slate-800 rounded-lg p-4 flex flex-col">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-xs font-bold text-white tracking-widest uppercase font-mono flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-cyanAccent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Developer Notepad
+          </h2>
+          <div id="wpmGauge" class="text-[10px] font-mono text-slate-500">
+            WPM: <span id="wpmVal">0</span>
+          </div>
+        </div>
+
+        <p class="text-[10px] text-slate-500 mb-2 leading-relaxed">
+          Type terminal command logs, scratch concepts, or notes. Speeds exceeding 60 WPM activate the Thermal Overdrive input channels.
+        </p>
+
+        <textarea id="notesArea" class="w-full flex-grow h-32 bg-slate-950 border border-slate-850 rounded p-2 text-xs font-mono focus:outline-none focus:border-cyanAccent transition-all duration-200 resize-none text-slate-300 placeholder-slate-700" placeholder="// Type notes here..."></textarea>
+      </div>
+
+      <!-- RESET CONTROL (Secret #19 countdown) -->
+      <div class="flex justify-center">
+        <button id="resetBtn" class="text-[10px] font-mono text-slate-600 hover:text-crimsonAccent transition-all duration-200 uppercase tracking-widest px-3 py-1 bg-slate-950/20 border border-slate-850 hover:border-crimsonAccent/40 rounded">
+          Reset Progress
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- CUSTOM CYBER POP MODAL (Secret Unlock / Level Up Alert) -->
+  <div id="customModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex justify-center items-center p-4 transition-all duration-300">
+    <div class="panel-card bg-slate-900 border-2 border-cyanAccent rounded-lg p-6 max-w-sm w-full flex flex-col items-center text-center space-y-4">
+      <div id="modalAvatarContainer" class="w-24 h-24 bg-slate-950 border border-slate-850 rounded p-1 flex items-center justify-center overflow-hidden">
+        <img id="modalAvatar" class="w-full h-full object-cover transition-opacity duration-300" alt="DexGPT modal">
+      </div>
+      <h3 id="modalTitle" class="text-sm font-bold text-white font-mono uppercase tracking-widest text-glow">Title</h3>
+      <p id="modalText" class="text-xs text-slate-400 font-mono leading-relaxed">Text</p>
+      <button onclick="closeDexgptModal()" class="px-4 py-1.5 rounded bg-cyanAccent text-cyberBlack hover:bg-cyanAccent/80 font-mono text-xs uppercase tracking-wider font-bold transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]">
+        Acknowledge
+      </button>
+    </div>
+  </div>
+
+  <!-- DYNAMIC MODALS AND CONSOLE ALERTS -->
+  <div id="supernovaAlert" class="fixed inset-0 z-50 pointer-events-none flex justify-center items-center opacity-0 transition-opacity duration-300">
+    <div class="bg-crimsonAccent/95 text-white font-mono font-bold border-2 border-white px-6 py-4 rounded shadow-2xl text-center select-none uppercase tracking-widest text-lg">
+      ⚡ SUPERNOVA EXPLOSION ⚡
+      <span class="block text-xs font-normal text-slate-200 mt-1">+500 VP Attraction Bonus</span>
+    </div>
+  </div>
+
+  <footer class="w-full text-center py-4 border-t border-slate-900 bg-slate-950/40 text-[10px] text-slate-600 font-mono">
+    <span>Vibe Coding Kit Sandbox &bull; Unlocked 2026 Engine &bull; DexGPT v1.0</span>
+  </footer>
+
+  <!-- DATABASE AND ENGINE SCRIPTS -->
+  <script>
+    // 40 PROJECTS COMPREHENSIVE DATABASE
+    const PROJECTS = {
+      beginner: [
+        { id: 1, title: "Custom Meme Maker", desc: "Upload a pet photo and type silly words to place on top of it to save and share." },
+        { id: 2, title: "Personal Mood Tracker", desc: "Big colorful buttons (Happy, Tired, Excited) that log daily feelings and count them up over time." },
+        { id: 3, title: "Dinner Decider Wheel", desc: "Type in 4 restaurant choices, click a big 'Spin' button, and watch a colorful wheel pick dinner." },
+        { id: 4, title: "Digital Soundboard Piano", desc: "Click bright neon tiles on the screen to play fun instrument sounds and drum beats instantly." },
+        { id: 5, title: "Virtual Pet Friend", desc: "A pixel animal on screen that you can feed, pet, or play with using buttons to fill its happiness bar." },
+        { id: 6, title: "Pixel Art Drawing Grid", desc: "A grid of small squares where you click to change colors and paint retro characters." },
+        { id: 7, title: "Instant Color Explorer", desc: "Tap the spacebar to watch the whole screen change to perfectly matching set of interior design colors." },
+        { id: 8, title: "Animated Greeting Card", desc: "Pick a background pattern, type a secret message, and watch it burst open with digital confetti." },
+        { id: 9, title: "Quiet Journal Box", desc: "A clean, peaceful digital notebook page where you can type out thoughts, change text colors, and save locally." },
+        { id: 10, title: "Neon Light-Paint Pad", desc: "A dark canvas pad where your mouse draws glowing neon lines that slowly fade away like real glow-sticks." },
+        { id: 11, title: "Daily Water Tracker", desc: "Click a giant water glass icon every time you drink to watch a massive digital bottle fill up." },
+        { id: 12, title: "Fridge Ingredient Chef", desc: "Check boxes for what ingredients you have (Eggs, Bread, Cheese) and instantly see simple meal ideas." },
+        { id: 13, title: "Home Workout Timer", desc: "A big, bold stopwatch that counts down exercise and rest intervals with loud buzzer sounds." },
+        { id: 14, title: "Restaurant Bill Splitter", desc: "Type in your total dinner bill, pick a tip percentage, and see exactly what each friend owes." },
+        { id: 15, title: "Flashcard Study Engine", desc: "Type in custom questions and answers, then click to flip the card over and test your memory." },
+        { id: 16, title: "Rock-Paper-Scissors Battle", desc: "Play the classic hand game against a computer opponent with animated icons and a win tracker." },
+        { id: 17, title: "Super Clicker Game", desc: "Click a giant central button as fast as you can to earn points, then buy automatic clickers." },
+        { id: 18, title: "Emoji Memory Matcher", desc: "Flip over square tiles in a grid to find matching pairs of hidden emojis before a timer runs out." },
+        { id: 19, title: "Math Sprint Trainer", desc: "Answer as many simple, rapid-fire math addition questions as you can in 30 seconds to beat a high score." },
+        { id: 20, title: "Virtual Bubble Wrap Popper", desc: "A screen full of realistic digital plastic bubbles that make satisfying popping animations when tapped." }
+      ],
+      pro: [
+        { id: 21, title: "Interactive Glassmorphic Audio Equalizer", desc: "Animated, responsive 10-band audio visualization using Tailwind grids and audio arrays." },
+        { id: 22, title: "Dynamic Live Markdown Previewer", desc: "Split-screen markdown editor text box syncing instantly to a formatted HTML output node." },
+        { id: 23, title: "SVG Vector Map Explorer", desc: "Interactive inline-SVG map dashboard with hover states, tooltips, and regional tracking parameters." },
+        { id: 24, title: "Drag-and-Drop Kanban Task Board", desc: "Project workflow tracker utilizing native HTML5 drag-and-drop APIs with visual state columns." },
+        { id: 25, title: "CSS Grid Dashboard Builder", desc: "Visual editor allowing users to click to add, resize, and rearrange component widgets on a live CSS grid layout." },
+        { id: 26, title: "Boids Autonomous Flocking Simulator", desc: "Canvas simulation rendering 200 independent vector nodes executing alignment, cohesion, and separation rules." },
+        { id: 27, title: "Matrix Digital Rain Controller", desc: "Terminal display rendering cascading streams with real-time speed, color tint, and character density sliders." },
+        { id: 28, title: "Interactive Sine-Wave Terrain", desc: "Animated canvas drawing stacked mathematical wave layers that warp based on cursor proximity." },
+        { id: 29, title: "Elastic Vector String Web", desc: "Node physics web where connected lines stretch, spring, and snap using basic Hooke's Law equations." },
+        { id: 30, title: "Cellular Automata Game of Life", desc: "Conway’s Game of Life grid allowing users to draw custom cell seeds and run generation steps." },
+        { id: 31, title: "Local SQLite Expense Tracker", desc: "React/Vite app running an in-memory database to parse, filter, and export personal financial transactions to CSV." },
+        { id: 32, title: "Drag-and-Drop Editorial Calendar", desc: "Full-scale monthly planning suite featuring event drag mutations and mock local state persistence." },
+        { id: 33, title: "In-Browser Markdown Personal Wiki", desc: "Decentralized knowledge base with local storage routing, internal linking, and global tag searching." },
+        { id: 34, title: "Live Weather API Integration Hub", desc: "Global tracking app querying open REST APIs to parse historical geo-data into trend charts." },
+        { id: 35, title: "CSV-to-JSON Schema Transformer", desc: "Parsing utility where users drop raw CSV strings and instantly map out structured JSON object trees." },
+        { id: 36, title: "System-Prompt State Engine RPG", desc: "Text adventure engine configuration forcing an LLM to output strict JSON game states for player turns." },
+        { id: 37, title: "Regex-to-Plain-English Translator", desc: "AI assistant instruction profile optimized with pattern parameters to dissect and explain terminal strings." },
+        { id: 38, title: "Multi-lingual Flashcard Engine", desc: "Vocabulary generator that builds contextual flashcards from text copy-pasted by the user." },
+        { id: 39, title: "Automated Structured Log Parser", desc: "Developer utility configured to ingest raw server logs and compile them into clean error tables." },
+        { id: 40, title: "Prompt-to-SQL Query Schematizer", desc: "Utility that ingests natural language text and constructs PostgreSQL queries based on a fixed database schema." }
+      ]
+    };
+
+    // KEYWORD SCENARIOS FOR OFFLINE CONVERSATIONS
+    const OFFLINE_CONVERSATIONS = [
+      { key: "git", text: "Git version control requires double-quoted strings to block token-splitting errors in directories with spaces, human.", expr: "neutral" },
+      { key: "linux", text: "Debian Crostini is standard on Chromebooks. Upgrade directories with apt commands and utilize /mnt/chromeos/ paths, human.", expr: "neutral" },
+      { key: "terminal", text: "Use explicit quote encapsulation on directories containing spaces, or escape them directly. Do the smaller fix first, human.", expr: "annoyed" },
+      { key: "cursor", text: "Cursor AI tiers include Pro $20/mo and Pro+ $60/mo. Fast queries consume from the credit pool, human.", expr: "smug" },
+      { key: "v0", text: "v0 by Vercel premium limits are $20/mo. Direct Figma imports are active. Do not ask me simple layout questions, human.", expr: "unimpressed" },
+      { key: "copilot", text: "GitHub Copilot individual tiers cost $10/mo with unlimited inline autocompletion. Useful, not elegant, human.", expr: "unimpressed" },
+      { key: "sqlite", text: "SQLite expense tracker parses data in-memory and exports standard CSV files. Useful. Not elegant, human.", expr: "correct" },
+      { key: "stinkweasel", text: "I am DexGPT: Dexter, the furious little stinkweasel. Do not mistake my presence for sentimentality, human.", expr: "annoyed" },
+      { key: "pricing", text: "Ecosystem tools charge average rates of $10 to $25 per month in 2026. Do the smaller, uglier fix first, human.", expr: "smug" },
+      { key: "supernova", text: "Supernova explosions occur when pulling >100 nodes. It adds 500 VP and shakes the layout, human.", expr: "correct" },
+      { key: "konami", text: "The Konami sequence changes the sandbox to green digital rain. No. That breaks the canon, human.", expr: "smug" },
+      { key: "pet", text: "I am a sacred dog with floppy ears down. Cute is for caricatures. Correctness is for professionals, human.", expr: "neutral" },
+      { key: "dog", text: "Observe the floppy ears down on my avatar. I coordinate system guides. Correctness is my core, human.", expr: "neutral" },
+      { key: "jargon", text: "Tab A contains zero jargon. Avoid markdown, git, and api terms. Everyday language only, human.", expr: "unimpressed" }
+    ];
+
+    // SYSTEM STATE AND LOCALSTORAGE INTERFACE
+    let state = {
+      vibePoints: 0,
+      level: 1,
+      unlockedSecrets: [],
+      customTitle: "Vibe Coding Kit",
+      longTrails: false,
+      highScoreShooter: 0
+    };
+
+    const LEVEL_REQUIREMENTS = [
+      { lvl: 1, vp: 0, desc: "Level 1: Sandbox & Trophy Hall" },
+      { lvl: 2, vp: 500, desc: "Level 2: Tooling Matrix" },
+      { lvl: 3, vp: 1500, desc: "Level 3: Syntax Shooter Panel" },
+      { lvl: 4, vp: 3000, desc: "Level 4: Pricing Forge" },
+      { lvl: 5, vp: 5000, desc: "Level 5: Absolute Beginner Project Vault" },
+      { lvl: 6, vp: 7500, desc: "Level 6: Linux CLI Mastery Zone" },
+      { lvl: 7, vp: 10000, desc: "Level 7: Next-Step Pro Developer Vault" }
+    ];
+
+    // LOAD STATE
+    function loadState() {
+      const stored = localStorage.getItem("vibe_coding_kit_state");
+      if (stored) {
+        try {
+          state = JSON.parse(stored);
+        } catch (e) {
+          console.error("Failed parsing state. Reinitializing.");
+        }
+      }
+      document.getElementById("vpCounter").innerText = state.vibePoints;
+      document.getElementById("levelCounter").innerText = state.level;
+      if (state.customTitle) {
+        document.getElementById("appTitle").firstElementChild.innerText = state.customTitle;
+        document.getElementById("titleInput").value = state.customTitle;
+      }
+      document.getElementById("shadowTrailCheckbox").checked = !!state.longTrails;
+      document.getElementById("shooterHighscoreText").innerText = `Best Run: ${state.highScoreShooter || 0} VP`;
+      
+      calculateLevelProgress();
+      renderUnlockedPanels();
+      renderTrophies();
+      renderBadgeTray();
+    }
+
+    // SAVE STATE
+    function saveState() {
+      localStorage.setItem("vibe_coding_kit_state", JSON.stringify(state));
+    }
+
+    // INCREMENT VP LOGIC
+    function addVibePoints(points) {
+      state.vibePoints += points;
+      document.getElementById("vpCounter").innerText = state.vibePoints;
+      
+      let currentLevel = 1;
+      for (let req of LEVEL_REQUIREMENTS) {
+        if (state.vibePoints >= req.vp) {
+          currentLevel = req.lvl;
+        }
+      }
+
+      if (currentLevel > state.level) {
+        triggerLevelUp(currentLevel);
+      }
+
+      calculateLevelProgress();
+      saveState();
+    }
+
+    // LEVEL UP CELEBRATION
+    function triggerLevelUp(newLvl) {
+      state.level = newLvl;
+      document.getElementById("levelCounter").innerText = newLvl;
+      
+      const shakeIntensity = newLvl * 2;
+      const mainGrid = document.getElementById("mainGrid");
+      mainGrid.style.setProperty('--shake-intensity', `${shakeIntensity}px`);
+      mainGrid.classList.add("shake-active");
+      
+      setTimeout(() => {
+        mainGrid.classList.remove("shake-active");
+      }, 400);
+
+      showDexgptModal(
+        `Clearance Tier ${newLvl} Active`, 
+        `Diagnostics check: Level upgrade resolved to Tier ${newLvl}. Useful. Not elegant. We can survive the tragedy, human.`, 
+        "correct"
+      );
+
+      renderUnlockedPanels();
+      renderBadgeTray();
+      renderTrophies();
+    }
+
+    // LEVEL PROGRESS CALCULATION
+    function calculateLevelProgress() {
+      let currentLvlReq = LEVEL_REQUIREMENTS.find(r => r.lvl === state.level);
+      let nextLvlReq = LEVEL_REQUIREMENTS.find(r => r.lvl === state.level + 1);
+
+      let percentage = 100;
+      if (nextLvlReq) {
+        const span = nextLvlReq.vp - currentLvlReq.vp;
+        const progress = state.vibePoints - currentLvlReq.vp;
+        percentage = Math.min(100, Math.max(0, (progress / span) * 100));
+      }
+
+      document.getElementById("xpBar").style.width = `${percentage}%`;
+    }
+
+    // DYNAMIC PANEL VISIBILITY ENGINE (0% CLS UNLOCKS)
+    function renderUnlockedPanels() {
+      const curLvl = state.level;
+      
+      LEVEL_REQUIREMENTS.forEach(req => {
+        const btn = document.getElementById(`tabBtn-${getTabIdByLevel(req.lvl)}`);
+        const milestone = document.getElementById(`milestone-l${req.lvl}`);
+
+        if (btn) {
+          if (curLvl >= req.lvl) {
+            btn.removeAttribute("disabled");
+            btn.classList.remove("text-slate-600");
+            btn.classList.add("text-slate-400");
+          } else {
+            btn.setAttribute("disabled", "true");
+            btn.classList.remove("text-slate-400");
+            btn.classList.add("text-slate-600");
+          }
+        }
+
+        if (milestone) {
+          if (curLvl >= req.lvl) {
+            milestone.innerHTML = `<span class="text-cyanAccent">✔</span> Unlocked: ${req.desc}`;
+            milestone.classList.remove("text-slate-600");
+            milestone.classList.add("text-slate-400");
+          } else {
+            milestone.innerHTML = `<span class="text-slate-700">🔒</span> Unlocked: ${req.desc}`;
+            milestone.classList.add("text-slate-600");
+            milestone.classList.remove("text-slate-400");
+          }
+        }
+      });
+
+      const mg2Lock = document.getElementById("minigame2Lock");
+      if (mg2Lock) {
+        if (curLvl >= 3) {
+          mg2Lock.classList.add("hidden");
+        } else {
+          mg2Lock.classList.remove("hidden");
+        }
+      }
+    }
+
+    function getTabIdByLevel(lvl) {
+      if (lvl === 2) return "tooling";
+      if (lvl === 4) return "pricing";
+      if (lvl === 5) return "projects-a";
+      if (lvl === 6) return "linux-cli";
+      if (lvl === 7) return "projects-b";
+      return "";
+    }
+
+    // TAB NAVIGATION PANEL ENGINE
+    let activeTabId = 'welcome';
+    function switchTab(tabId) {
+      let requiredLvl = 1;
+      if (tabId === 'tooling') requiredLvl = 2;
+      else if (tabId === 'pricing') requiredLvl = 4;
+      else if (tabId === 'projects-a') requiredLvl = 5;
+      else if (tabId === 'linux-cli') requiredLvl = 6;
+      else if (tabId === 'projects-b') requiredLvl = 7;
+
+      if (state.level < requiredLvl) {
+        triggerDexterSpeak(`Authentication check failed. Level ${requiredLvl} clearances required. That breaks the canon, human.`, "annoyed");
+        return;
+      }
+
+      ['welcome', 'tooling', 'pricing', 'projects-a', 'linux-cli', 'projects-b'].forEach(id => {
+        document.getElementById(`tabPane-${id}`).classList.add("hidden");
+        document.getElementById(`tabBtn-${id}`).classList.remove("text-cyanAccent", "bg-slate-900/20");
+        document.getElementById(`tabBtn-${id}`).classList.add("text-slate-400");
+      });
+
+      document.getElementById(`tabPane-${tabId}`).classList.remove("hidden");
+      const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+      activeBtn.classList.remove("text-slate-400");
+      activeBtn.classList.add("text-cyanAccent", "bg-slate-900/20");
+
+      activeTabId = tabId;
+      alignTabIndicator();
+    }
+
+    function alignTabIndicator() {
+      const activeBtn = document.getElementById(`tabBtn-${activeTabId}`);
+      const indicator = document.getElementById("tabIndicator");
+      if (activeBtn && indicator) {
+        indicator.style.width = `${activeBtn.offsetWidth}px`;
+        indicator.style.left = `${activeBtn.offsetLeft}px`;
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      alignTabIndicator();
+      checkWindowResizeSecret();
+    });
+    setTimeout(alignTabIndicator, 200);
+
+    // TROPHIES & SECRETS ARCHITECTURE
+    const ALL_TROPHIES = [
+      { id: "konami", name: "Matrix Crawler", desc: "Trigger Konami sequence", unlocked: false },
+      { id: "overclock", name: "Plasma Engine", desc: "Activate overclock diagnostics", unlocked: false },
+      { id: "midnight", name: "Night Watchman", desc: "Clock verified past midnight", unlocked: false },
+      { id: "spawner", name: "Key Shifter", desc: "Emit frequency nodes via letters", unlocked: false },
+      { id: "silk", name: "Cosmic weaver", desc: "Select Silk chromatic palette", unlocked: false },
+      { id: "inversion", name: "Dipole Operator", desc: "Toggle canvas repulsion matrix", unlocked: false },
+      { id: "lucky7", name: "Casino Royale", desc: "Exceed 7,777 particle streams", unlocked: false },
+      { id: "resize", name: "Console Architect", desc: "Trigger dual-resize parameters", unlocked: false },
+      { id: "wpm", name: "Flame Gauge", desc: "Typing exceeds 60 WPM", unlocked: false },
+      { id: "bounce", name: "Elastic Elastic", desc: "Hover the Crostini title link", unlocked: false },
+      { id: "prismatic", name: "Ghost Particle", desc: "Collide with a Prismatic star", unlocked: false },
+      { id: "glitch", name: "Glitch Vector", desc: "Expose chromatic glitch filters", unlocked: false },
+      { id: "spaceAttract", name: "Space Magnet", desc: "Trigger gravity via keyboard", unlocked: false },
+      { id: "screenSaver", name: "Spiral Engine", desc: "Trigger idle geometric helix", unlocked: false },
+      { id: "sound", name: "Audio Pilot", desc: "Enable speed sound oscillators", unlocked: false },
+      { id: "customTitle", name: "Title Forger", desc: "Execute workspace rename", unlocked: false },
+      { id: "trailTrophy", name: "Trail Master", desc: "Unleash 400% extended path bounds", unlocked: false },
+      { id: "resetHover", name: "Launch Director", desc: "Hover the purge safety sequence", unlocked: false },
+      { id: "scrollDrift", name: "Scroll Resonance", desc: "Drift particles via panel scroll", unlocked: false },
+      { id: "sacredPet", name: "Tranquil Soul", desc: "Meditate beside DexGPT", unlocked: false }
+    ];
+
+    function unlockSecret(secretId, silent = false) {
+      if (!state.unlockedSecrets.includes(secretId)) {
+        state.unlockedSecrets.push(secretId);
+        saveState();
+        renderTrophies();
+        renderBadgeTray();
+        
+        if (!silent) {
+          let secretName = ALL_TROPHIES.find(t => t.id === secretId)?.name || secretId;
+          showDexgptModal(
+            `Secret Discovered: ${secretName}`,
+            `Observed system anomaly [ID: ${secretId}]. I am logging this validation, human. Do not mistake this for affection.`,
+            "smug"
+          );
+          addVibePoints(250);
+        }
+      }
+    }
+
+    function renderTrophies() {
+      const grid = document.getElementById("trophyGrid");
+      grid.innerHTML = "";
+
+      ALL_TROPHIES.forEach(t => {
+        const isUnlocked = state.unlockedSecrets.includes(t.id);
+        const card = document.createElement("div");
+        card.className = `p-2 rounded border text-center transition-all duration-200 select-none ${
+          isUnlocked 
+            ? 'bg-slate-900 border-cyanAccent/45 text-white hover:scale-[1.03]' 
+            : 'bg-slate-950/80 border-slate-900 text-slate-700'
+        }`;
+        
+        card.innerHTML = `
+          <div class="text-[9px] font-mono tracking-widest font-bold truncate uppercase ${isUnlocked ? 'text-cyanAccent' : 'text-slate-700'}">
+            ${t.name}
+          </div>
+          <div class="text-[8px] mt-0.5 leading-tight text-slate-500 font-mono">
+            ${isUnlocked ? t.desc : 'Locked Objective'}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      const shadowCheckbox = document.getElementById("shadowTrailToggleContainer");
+      if (state.unlockedSecrets.length > 0) {
+        shadowCheckbox.classList.remove("hidden");
+      }
+    }
+
+    function renderBadgeTray() {
+      const tray = document.getElementById("badgeTray");
+      tray.innerHTML = "";
+
+      state.unlockedSecrets.forEach(secId => {
+        const badge = document.createElement("span");
+        badge.className = "w-2.5 h-2.5 rounded-full border border-black bg-cyanAccent inline-block";
+        badge.title = `Achievement Active: ${secId}`;
+        tray.appendChild(badge);
+      });
+    }
+
+    // EMBEDDED BASE64 DIALOGUE IMAGES
+    const DEXTER_IMAGES = {
+      "neutral": "data:image/jpeg;base64,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",
+      "annoyed": "data:image/jpeg;base64,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",
+      "smug": "data:image/jpeg;base64,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",
+      "unimpressed": "data:image/jpeg;base64,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",
+      "correct": "data:image/jpeg;base64,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",
+      "happy": "data:image/jpeg;base64,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",
+      "friendly": "data:image/jpeg;base64,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",
+      "bored": "data:image/jpeg;base64,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"
+    };
+
+    // UPDATE DexGPT DIALOGUE WRAPPER
+    function triggerDexterSpeak(text, expression = "neutral") {
+      const bubble = document.getElementById("dexterBubbleText");
+      if (bubble) {
+        bubble.innerText = text;
+      }
+      
+      const avatar = document.getElementById("dexterAvatar");
+      if (avatar) {
+        avatar.src = DEXTER_IMAGES[expression] || DEXTER_IMAGES.neutral;
+      }
+    }
+
+    // CUSTOM CYBER POP MODAL SYSTEM
+    function showDexgptModal(title, text, expression = "neutral") {
+      const modal = document.getElementById("customModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalText = document.getElementById("modalText");
+      const avatar = document.getElementById("modalAvatar");
+
+      modalTitle.innerText = title;
+      modalText.innerText = text;
+
+      avatar.src = DEXTER_IMAGES[expression] || DEXTER_IMAGES.neutral;
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeDexgptModal() {
+      const modal = document.getElementById("customModal");
+      modal.classList.add("hidden");
+    }
+
+    // HIGH-PERFORMANCE MINIGAME 1: GRAVITY GAUNTLET CANVAS ENGINE
+    const canvas = document.getElementById("sandboxCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    window.addEventListener("load", resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
+
+    const MAX_POOL_SIZE = 5000;
+    const particlePool = [];
+    for (let i = 0; i < MAX_POOL_SIZE; i++) {
+      particlePool.push({
+        x: 0,
+        y: 0,
+        vx: 0,
+        vy: 0,
+        size: 0,
+        color: '#FF007F',
+        shape: 'circle',
+        active: false,
+        life: 0,
+        maxLife: 0
+      });
+    }
+
+    let activeParticlesCount = 0;
+    let totalParticlesSpawned = 0;
+    let activePointer = { x: 0, y: 0, active: false, gravityWell: false };
+    let isGravityInverted = false;
+    let isMatrixActive = false;
+    let matrixTimer = 0;
+
+    canvas.addEventListener("mousedown", (e) => {
+      updatePointer(e);
+      activePointer.active = true;
+      activePointer.gravityWell = true;
+      document.getElementById("canvasOverlay").classList.add("opacity-0");
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const newX = e.clientX - rect.left;
+      const newY = e.clientY - rect.top;
+      
+      const dx = newX - activePointer.x;
+      const dy = newY - activePointer.y;
+      const speed = Math.hypot(dx, dy);
+
+      activePointer.x = newX;
+      activePointer.y = newY;
+
+      if (activePointer.active) {
+        spawnDragParticles(activePointer.x, activePointer.y);
+      }
+
+      if (speed > 60 && isSoundEnabled) {
+        playSpeedTone(200 + speed * 5, 0.1);
+        unlockSecret("sound");
+      }
+    });
+
+    canvas.addEventListener("mouseup", () => {
+      activePointer.gravityWell = false;
+      activePointer.active = false;
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      activePointer.gravityWell = false;
+      activePointer.active = false;
+    });
+
+    canvas.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        activePointer.active = true;
+        activePointer.gravityWell = true;
+        updateTouchPointer(e.touches[0]);
+        document.getElementById("canvasOverlay").classList.add("opacity-0");
+      }
+    }, { passive: false });
+
+    canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+      if (e.touches.length > 0 && activePointer.active) {
+        updateTouchPointer(e.touches[0]);
+        spawnDragParticles(activePointer.x, activePointer.y);
+      }
+    }, { passive: false });
+
+    canvas.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      activePointer.active = false;
+      activePointer.gravityWell = false;
+    }, { passive: false });
+
+    function updatePointer(e) {
+      const rect = canvas.getBoundingClientRect();
+      activePointer.x = e.clientX - rect.left;
+      activePointer.y = e.clientY - rect.top;
+    }
+
+    function updateTouchPointer(touch) {
+      const rect = canvas.getBoundingClientRect();
+      activePointer.x = touch.clientX - rect.left;
+      activePointer.y = touch.clientY - rect.top;
+    }
+
+    let poolHeadIndex = 0;
+    function spawnParticle(x, y, vx, vy, size, color, shape = 'circle') {
+      const cap = 1000 + state.level * 250;
+      
+      let p = particlePool[poolHeadIndex];
+      p.x = x;
+      p.y = y;
+      p.vx = vx;
+      p.vy = vy;
+      p.size = size;
+      p.color = color;
+      p.shape = shape;
+      p.active = true;
+      p.life = 0;
+      p.maxLife = 80 + Math.random() * 80;
+
+      poolHeadIndex = (poolHeadIndex + 1) % cap;
+      
+      totalParticlesSpawned++;
+      if (totalParticlesSpawned === 7777) {
+        triggerLuckySevenSecret();
+      }
+      
+      addVibePoints(1);
+    }
+
+    function spawnDragParticles(mx, my) {
+      const count = 3;
+      for (let i = 0; i < count; i++) {
+        const vx = (Math.random() - 0.5) * 4;
+        const vy = (Math.random() - 0.5) * 4;
+        const size = 2 + Math.random() * 3;
+        
+        let color = '#FF007F';
+        if (Math.random() < 0.3) color = '#00E5FF';
+        else if (Math.random() < 0.6) color = '#E63946';
+        
+        let shape = 'circle';
+        let finalSize = size;
+        if (Math.random() < 0.002) {
+          shape = 'star';
+          finalSize = 14;
+          color = 'prismatic';
+        }
+
+        spawnParticle(mx, my, vx, vy, finalSize, color, shape);
+      }
+    }
+
+    // WEB AUDIO SPEED OSCILLATORS
+    let audioCtx = null;
+    let isSoundEnabled = false;
+
+    document.getElementById("soundToggle").addEventListener("click", () => {
+      isSoundEnabled = !isSoundEnabled;
+      const btn = document.getElementById("soundToggle");
+      if (isSoundEnabled) {
+        btn.innerText = "Sound: ON";
+        btn.classList.add("bg-cyanAccent/20", "text-cyanAccent");
+      } else {
+        btn.innerText = "Sound: OFF";
+        btn.classList.remove("bg-cyanAccent/20", "text-cyanAccent");
+      }
+      unlockSecret("sound", true);
+    });
+
+    function playSpeedTone(freq, dur) {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (e) {
+        console.error("Audio block:", e);
+      }
+    }
+
+    // MAIN requestAnimationFrame FRAME LOOP (60 FPS BOUNDS)
+    let lastTime = 0;
+    let idleTimer = 0;
+    let isIdle = false;
+
+    function frameLoop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      const dt = timestamp - lastTime;
+      lastTime = timestamp;
+
+      const maxCap = 1000 + state.level * 250;
+      document.getElementById("particleCounter").innerText = `Active Nodes: ${activeParticlesCount} / ${maxCap}`;
+
+      activeParticlesCount = 0;
+
+      const clearAlpha = state.longTrails ? 0.02 : 0.12;
+      ctx.fillStyle = `rgba(11, 12, 16, ${clearAlpha})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (isMatrixActive) {
+        renderMatrixRain();
+      } else if (isIdle) {
+        renderIdleScreenSaver(timestamp);
+      } else {
+        let particlesAttractedThisFrame = 0;
+        
+        for (let i = 0; i < MAX_POOL_SIZE; i++) {
+          let p = particlePool[i];
+          if (!p.active) continue;
+
+          activeParticlesCount++;
+          p.life++;
+
+          if (p.life >= p.maxLife) {
+            p.active = false;
+            continue;
+          }
+
+          const isAttracting = activePointer.gravityWell || isSpacebarHeld;
+          
+          if (isAttracting) {
+            const dx = activePointer.x - p.x;
+            const dy = activePointer.y - p.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < 400 && dist > 2) {
+              const force = (400 - dist) / 400 * 0.8;
+              const fx = (dx / dist) * force;
+              const fy = (dy / dist) * force;
+
+              if (isGravityInverted) {
+                p.vx -= fx * 2.5;
+                p.vy -= fy * 2.5;
+              } else {
+                p.vx += fx;
+                p.vy += fy;
+              }
+
+              if (dist < 35 && !isGravityInverted) {
+                particlesAttractedThisFrame++;
+              }
+            }
+          }
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.98;
+          p.vy *= 0.98;
+
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = '#000000';
+
+          if (p.shape === 'star') {
+            ctx.fillStyle = p.color === 'prismatic' ? `hsl(${(timestamp / 4) % 360}, 100%, 60%)` : p.color;
+            drawStar(ctx, p.x, p.y, 5, p.size, p.size / 2);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+          }
+        }
+
+        if (particlesAttractedThisFrame > 100) {
+          triggerSupernovaExplosion();
+        }
+      }
+
+      if (activePointer.active) {
+        idleTimer = 0;
+        if (isIdle) {
+          isIdle = false;
+          triggerDexterSpeak("System re-engaged. Ready to observe, human.", "neutral");
+        }
+      } else {
+        idleTimer += dt;
+        if (idleTimer > 30000 && !isIdle) {
+          isIdle = true;
+          unlockSecret("screenSaver");
+          triggerDexterSpeak("System idle. Idle Engine Screen Saver online, human.", "unimpressed");
+        }
+      }
+
+      requestAnimationFrame(frameLoop);
+    }
+    requestAnimationFrame(frameLoop);
+
+    function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+      let rot = Math.PI / 2 * 3;
+      let x = cx;
+      let y = cy;
+      let step = Math.PI / spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // SUPERNOVA EXPLOSION ENGINE
+    let supernovaCooldown = false;
+    function triggerSupernovaExplosion() {
+      if (supernovaCooldown) return;
+      supernovaCooldown = true;
+      setTimeout(() => { supernovaCooldown = false; }, 4000);
+
+      const alert = document.getElementById("supernovaAlert");
+      alert.classList.add("opacity-100");
+      setTimeout(() => { alert.classList.remove("opacity-100"); }, 2000);
+
+      const mainGrid = document.getElementById("mainGrid");
+      mainGrid.style.setProperty('--shake-intensity', '8px');
+      mainGrid.classList.add("shake-active");
+      setTimeout(() => { mainGrid.classList.remove("shake-active"); }, 400);
+
+      const burstCount = 180;
+      for (let i = 0; i < burstCount; i++) {
+        const angle = (i / burstCount) * Math.PI * 2;
+        const speed = 3 + Math.random() * 8;
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+        spawnParticle(
+          activePointer.x, 
+          activePointer.y, 
+          vx, 
+          vy, 
+          2 + Math.random() * 3, 
+          '#E63946', 
+          'circle'
+        );
+      }
+
+      addVibePoints(500);
+      triggerDexterSpeak("Supernova explosion observed. Multi-particle limits exceeded, human.", "smug");
+    }
+
+    // MINIGAME #2: SYNTAX SHOOTER CORE ENGINE
+    let shooterTimerInterval = null;
+    let shooterGameActive = false;
+    let shooterScoreVal = 0;
+    let shooterComboMultiplier = 1;
+    let shooterComboHits = 0;
+    let shooterTimeRemaining = 30;
+
+    const MARKUP_SNIPPETS = [
+      "<div>", "console.log()", "const x = 1", "function()", "npm run dev",
+      "git commit", "localStorage", "array.map()", "Crostini", "sudo apt update",
+      "border-slate-800", "window.localStorage", "requestAnimationFrame"
+    ];
+
+    document.getElementById("startShooterBtn").addEventListener("click", startSyntaxShooter);
+
+    function startSyntaxShooter() {
+      shooterGameActive = true;
+      shooterScoreVal = 0;
+      shooterComboMultiplier = 1;
+      shooterComboHits = 0;
+      shooterTimeRemaining = 30;
+      document.getElementById("shooterMenu").classList.add("hidden");
+      document.getElementById("shooterScore").innerText = "0 VP";
+      document.getElementById("shooterTimer").innerText = "30s";
+      document.getElementById("shooterComboVal").innerText = "x1";
+      document.getElementById("shooterArenaBlocks").innerHTML = "";
+
+      triggerDexterSpeak("Syntax Shooter initialized. Debug the markup before compiler boundaries collapse, human.", "neutral");
+
+      let blockSpawnTimer = setInterval(() => {
+        if (!shooterGameActive) {
+          clearInterval(blockSpawnTimer);
+          return;
+        }
+        spawnShooterBlock();
+      }, 900);
+
+      shooterTimerInterval = setInterval(() => {
+        shooterTimeRemaining--;
+        document.getElementById("shooterTimer").innerText = `${shooterTimeRemaining}s`;
+        
+        if (shooterTimeRemaining <= 0) {
+          endSyntaxShooter();
+        }
+      }, 1000);
+    }
+
+    function spawnShooterBlock() {
+      const arena = document.getElementById("shooterArenaBlocks");
+      const block = document.createElement("div");
+      block.className = "absolute bg-slate-900 border border-cyanAccent/40 hover:border-pinkAccent text-white font-mono text-[9px] px-2 py-1 rounded cursor-pointer select-none transition-shadow";
+      block.innerText = MARKUP_SNIPPETS[Math.floor(Math.random() * MARKUP_SNIPPETS.length)];
+
+      const arenaWidth = arena.offsetWidth;
+      const blockWidth = 90;
+      const leftPos = Math.random() * (arenaWidth - blockWidth);
+      block.style.left = `${leftPos}px`;
+      block.style.top = "0px";
+
+      arena.appendChild(block);
+
+      let topPos = 0;
+      const speed = 1.2 + Math.random() * 1.5;
+
+      function moveDown() {
+        if (!shooterGameActive || !block.parentElement) return;
+        topPos += speed;
+        block.style.top = `${topPos}px`;
+
+        if (topPos > 150) {
+          block.remove();
+          resetShooterCombo();
+        } else {
+          requestAnimationFrame(moveDown);
+        }
+      }
+      requestAnimationFrame(moveDown);
+
+      block.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
+        registerShooterHit(block);
+      });
+      block.addEventListener("touchstart", (e) => {
+        e.stopPropagation();
+        registerShooterHit(block);
+      });
+    }
+
+    function registerShooterHit(block) {
+      block.remove();
+      shooterComboHits++;
+      
+      if (shooterComboHits >= 15) shooterComboMultiplier = 4;
+      else if (shooterComboHits >= 8) shooterComboMultiplier = 3;
+      else if (shooterComboHits >= 3) shooterComboMultiplier = 2;
+
+      document.getElementById("shooterComboVal").innerText = `x${shooterComboMultiplier}`;
+
+      const gainedVal = 20 * shooterComboMultiplier;
+      shooterScoreVal += gainedVal;
+      document.getElementById("shooterScore").innerText = `${shooterScoreVal} VP`;
+
+      const rect = canvas.getBoundingClientRect();
+      const blockRect = block.getBoundingClientRect();
+      const canvasX = blockRect.left - rect.left + 45;
+      const canvasY = blockRect.top - rect.top + 10;
+      for (let i = 0; i < 15; i++) {
+        spawnParticle(
+          canvasX, 
+          canvasY, 
+          (Math.random() - 0.5) * 6, 
+          (Math.random() - 0.5) * 6, 
+          2, 
+          '#00E5FF', 
+          'circle'
+        );
+      }
+
+      addVibePoints(gainedVal);
+    }
+
+    function resetShooterCombo() {
+      shooterComboHits = 0;
+      shooterComboMultiplier = 1;
+      document.getElementById("shooterComboVal").innerText = "x1";
+      const arena = document.getElementById("shooterArena");
+      arena.classList.add("border-crimsonAccent");
+      setTimeout(() => { arena.classList.remove("border-crimsonAccent"); }, 200);
+    }
+
+    function endSyntaxShooter() {
+      shooterGameActive = false;
+      clearInterval(shooterTimerInterval);
+      
+      document.getElementById("shooterMenu").classList.remove("hidden");
+      document.getElementById("startShooterBtn").innerText = "Restart Sequence";
+      
+      if (shooterScoreVal > state.highScoreShooter) {
+        state.highScoreShooter = shooterScoreVal;
+        saveState();
+      }
+      
+      document.getElementById("shooterHighscoreText").innerText = `Best Run: ${state.highScoreShooter} VP`;
+      triggerDexterSpeak(`Reflex sequence terminated. Score evaluated: ${shooterScoreVal} VP. Best: ${state.highScoreShooter} VP, human.`, "smug");
+    }
+
+    // THE 40 PROJECTS CATALOG POPULATION ENGINE
+    function populateProjectVaults() {
+      const beginContainer = document.getElementById("beginnerProjectsList");
+      const proContainer = document.getElementById("proProjectsList");
+      
+      beginContainer.innerHTML = "";
+      proContainer.innerHTML = "";
+
+      PROJECTS.beginner.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "p-3 border border-slate-800 bg-slate-950/40 rounded hover:border-slate-700 transition-colors";
+        item.innerHTML = `
+          <div class="flex justify-between items-center select-none cursor-pointer" onclick="toggleProjectExpand(this)">
+            <h4 class="text-xs font-bold text-white font-mono uppercase tracking-wider">${p.id}. ${p.title}</h4>
+            <span class="text-[9px] text-cyanAccent font-mono">Expand +</span>
+          </div>
+          <div class="hidden text-[11px] text-slate-400 mt-2 border-t border-slate-900 pt-2 leading-relaxed">
+            ${p.desc}
+          </div>
+        `;
+        beginContainer.appendChild(item);
+      });
+
+      PROJECTS.pro.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "p-3 border border-slate-800 bg-slate-950/40 rounded hover:border-slate-700 transition-colors";
+        item.innerHTML = `
+          <div class="flex justify-between items-center select-none cursor-pointer" onclick="toggleProjectExpand(this)">
+            <h4 class="text-xs font-bold text-white font-mono uppercase tracking-wider">${p.id}. ${p.title}</h4>
+            <span class="text-[9px] text-pinkAccent font-mono">Expand +</span>
+          </div>
+          <div class="hidden text-[11px] text-slate-400 mt-2 border-t border-slate-900 pt-2 leading-relaxed font-mono">
+            ${p.desc}
+          </div>
+        `;
+        proContainer.appendChild(item);
+      });
+    }
+
+    function toggleProjectExpand(headerElement) {
+      const content = headerElement.nextElementSibling;
+      const span = headerElement.querySelector("span");
+      
+      if (content.classList.contains("hidden")) {
+        content.classList.remove("hidden");
+        span.innerText = "Collapse -";
+      } else {
+        content.classList.add("hidden");
+        span.innerText = "Expand +";
+      }
+    }
+
+    populateProjectVaults();
+
+    // DexGPT SANCTUARY PET BUTTON
+    document.getElementById("petDexterBtn").addEventListener("click", () => {
+      unlockSecret("sacredPet");
+      const msg = document.getElementById("petDexterMsg");
+      msg.innerText = "You meditate beside DexGPT. Serene waves propagate. Balance is maintained. Do not mistake this for affection, human.";
+      msg.classList.remove("hidden");
+      
+      triggerDexterSpeak("System balance maintained. I remain completely calm. Do not mistake this for affection, human.", "correct");
+
+      setTimeout(() => {
+        msg.classList.add("hidden");
+      }, 5000);
+    });
+
+    // WPM MONITOR ENGINE (Secret #9) & Scripted keyword matcher
+    const notesArea = document.getElementById("notesArea");
+    let keyTimestamps = [];
+    let matchDebounceTimer = null;
+
+    notesArea.addEventListener("input", (e) => {
+      const now = Date.now();
+      keyTimestamps.push(now);
+      
+      keyTimestamps = keyTimestamps.filter(t => now - t < 6000);
+      const wpm = Math.floor((keyTimestamps.length / 5) * 10);
+      document.getElementById("wpmVal").innerText = wpm;
+
+      const notesBox = document.getElementById("notesArea");
+
+      if (wpm > 60) {
+        unlockSecret("wpm");
+        notesBox.className = "w-full flex-grow h-32 bg-slate-950 border border-pinkAccent rounded p-2 text-xs font-mono focus:outline-none transition-all duration-200 resize-none text-pinkAccent placeholder-slate-700 shadow-md";
+        document.getElementById("wpmGauge").classList.add("text-pinkAccent", "font-bold");
+        
+        const canvasRect = canvas.getBoundingClientRect();
+        const textRect = notesBox.getBoundingClientRect();
+        const particleX = textRect.left - canvasRect.left + (Math.random() * textRect.width);
+        const particleY = textRect.top - canvasRect.top + (Math.random() * textRect.height);
+
+        spawnParticle(
+          particleX, 
+          particleY, 
+          (Math.random() - 0.5) * 4, 
+          -3 - Math.random() * 3, 
+          2, 
+          '#FF007F', 
+          'circle'
+        );
+      } else {
+        notesBox.className = "w-full flex-grow h-32 bg-slate-950 border border-slate-850 focus:border-cyanAccent rounded p-2 text-xs font-mono focus:outline-none transition-all duration-200 resize-none text-slate-300 placeholder-slate-700";
+        document.getElementById("wpmGauge").className = "text-[10px] font-mono text-slate-500";
+      }
+
+      // Keyword dialog scanner with debounce
+      clearTimeout(matchDebounceTimer);
+      matchDebounceTimer = setTimeout(() => {
+        checkTextareaKeywords(notesBox.value);
+      }, 700);
+    });
+
+    function checkTextareaKeywords(val) {
+      const normalized = val.toLowerCase();
+      
+      for (let scenario of OFFLINE_CONVERSATIONS) {
+        if (normalized.includes(scenario.key)) {
+          triggerDexterSpeak(scenario.text, scenario.expr);
+          break;
+        }
+      }
+    }
+
+    // SCROLL DRIFT RESONANCE ENGINE (Secret #20)
+    const contentPane = document.getElementById("tabContentPane");
+    contentPane.addEventListener("scroll", (e) => {
+      unlockSecret("scrollDrift", true);
+      const scrollSpeed = Math.abs(contentPane.scrollTop % 30 - 15);
+      
+      for (let i = 0; i < MAX_POOL_SIZE; i++) {
+        let p = particlePool[i];
+        if (p.active) {
+          p.vx += (Math.random() - 0.5) * (scrollSpeed * 0.1);
+        }
+      }
+    });
+
+    // DYNAMIC WORKSPACE TITLE (Secret #17)
+    const titleContainer = document.getElementById("titleContainer");
+    const appTitle = document.getElementById("appTitle");
+    const titleInput = document.getElementById("titleInput");
+
+    titleContainer.addEventListener("dblclick", () => {
+      appTitle.classList.add("hidden");
+      titleInput.classList.remove("hidden");
+      titleInput.focus();
+    });
+
+    titleInput.addEventListener("blur", () => {
+      saveCustomTitle();
+    });
+
+    titleInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        saveCustomTitle();
+      }
+    });
+
+    function saveCustomTitle() {
+      const val = titleInput.value.trim() || "Vibe Coding Kit";
+      state.customTitle = val;
+      saveState();
+
+      appTitle.firstElementChild.innerText = val;
+      appTitle.classList.remove("hidden");
+      titleInput.classList.add("hidden");
+      
+      unlockSecret("customTitle");
+    }
+
+    // THE 20 SECRETS SPECIFIC TRIGGERS ENGINE
+    
+    // Secret #1: Konami Code Sequence
+    const konamiSequence = [
+      "ArrowUp", "ArrowUp", 
+      "ArrowDown", "ArrowDown", 
+      "ArrowLeft", "ArrowRight", 
+      "ArrowLeft", "ArrowRight", 
+      "b", "a"
+    ];
+    let konamiIndex = 0;
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === konamiSequence[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiSequence.length) {
+          triggerKonamiRain();
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+
+      if (/^[a-zA-Z]$/.test(e.key)) {
+        triggerKeySpawner();
+      }
+
+      if (e.key === " ") {
+        isSpacebarHeld = true;
+        unlockSecret("spaceAttract", true);
+        e.preventDefault();
+      }
+    });
+
+    let isSpacebarHeld = false;
+    window.addEventListener("keyup", (e) => {
+      if (e.key === " ") {
+        isSpacebarHeld = false;
+      }
+    });
+
+    function triggerKonamiRain() {
+      isMatrixActive = true;
+      matrixTimer = Date.now();
+      unlockSecret("konami");
+      
+      setTimeout(() => {
+        isMatrixActive = false;
+      }, 10000);
+    }
+
+    const cols = 50;
+    const yOffsets = Array(cols).fill(0);
+    function renderMatrixRain() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00FF00";
+      ctx.font = "11px monospace";
+
+      for (let i = 0; i < cols; i++) {
+        const char = String.fromCharCode(33 + Math.floor(Math.random() * 93));
+        const x = (canvas.width / cols) * i;
+        const y = yOffsets[i];
+
+        ctx.fillText(char, x, y);
+
+        if (y > canvas.height && Math.random() > 0.985) {
+          yOffsets[i] = 0;
+        } else {
+          yOffsets[i] += 12;
+        }
+      }
+    }
+
+    // Secret #2: Thermal Overclock CLICK TRIGGER
+    let statsHeaderClicks = 0;
+    let lastStatsClick = 0;
+    document.getElementById("statsHeader").addEventListener("click", () => {
+      const now = Date.now();
+      if (now - lastStatsClick < 350) {
+        statsHeaderClicks++;
+      } else {
+        statsHeaderClicks = 1;
+      }
+      lastStatsClick = now;
+
+      if (statsHeaderClicks >= 10) {
+        document.body.classList.toggle("overclocked");
+        unlockSecret("overclock");
+        statsHeaderClicks = 0;
+      }
+    });
+
+    // Secret #3: Midnight Sky Shift
+    function checkMidnightSky() {
+      const hours = new Date().getHours();
+      if (hours >= 0 && hours < 6) {
+        unlockSecret("midnight", true);
+        setInterval(() => {
+          if (!isMatrixActive && !isIdle) {
+            spawnParticle(
+              Math.random() * canvas.width, 
+              0, 
+              (Math.random() - 0.5) * 2, 
+              3 + Math.random() * 3, 
+              1.5, 
+              '#FFFFFF', 
+              'circle'
+            );
+          }
+        }, 300);
+      }
+    }
+    checkMidnightSky();
+
+    // Secret #4: Keyboard Spawner
+    function triggerKeySpawner() {
+      unlockSecret("spawner", true);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const count = 12;
+
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const velocity = 2 + Math.random() * 4;
+        spawnParticle(
+          cx, 
+          cy, 
+          Math.cos(angle) * velocity, 
+          Math.sin(angle) * velocity, 
+          2, 
+          '#00E5FF', 
+          'circle'
+        );
+      }
+    }
+
+    // Secret #5: Cosmic Silk Palette Shift Click
+    const silkDot = document.createElement("div");
+    silkDot.className = "absolute top-0 right-0 w-[1px] h-[1px] bg-transparent cursor-pointer z-50";
+    document.body.appendChild(silkDot);
+    silkDot.addEventListener("click", () => {
+      document.body.classList.toggle("cosmic-silk");
+      unlockSecret("silk");
+    });
+
+    // Secret #6: Gravity Inversion
+    canvas.addEventListener("dblclick", () => {
+      isGravityInverted = !isGravityInverted;
+      unlockSecret("inversion", true);
+
+      const notice = document.getElementById("canvasNotice");
+      const indicator = document.getElementById("gravityModeIndicator");
+      
+      if (isGravityInverted) {
+        notice.innerText = "Repulsion Inverted!";
+        notice.classList.remove("hidden");
+        indicator.innerText = "GRAVITY: OUTWARD (REPULSION)";
+        indicator.classList.remove("bg-cyanAccent/10", "text-cyanAccent", "border-cyanAccent/20");
+        indicator.classList.add("bg-pinkAccent/10", "text-pinkAccent", "border-pinkAccent/20");
+      } else {
+        notice.innerText = "Gravity Attracting!";
+        notice.classList.remove("hidden");
+        indicator.innerText = "GRAVITY: INWARD";
+        indicator.classList.add("bg-cyanAccent/10", "text-cyanAccent", "border-cyanAccent/20");
+        indicator.classList.remove("bg-pinkAccent/10", "text-pinkAccent", "border-pinkAccent/20");
+      }
+
+      setTimeout(() => { notice.classList.add("hidden"); }, 2000);
+    });
+
+    // Secret #7: Lucky Seven Milestone
+    function triggerLuckySevenSecret() {
+      unlockSecret("lucky7");
+      
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const count = 300;
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const velocity = 3 + Math.random() * 8;
+        spawnParticle(
+          cx, 
+          cy, 
+          Math.cos(angle) * velocity, 
+          Math.sin(angle) * velocity, 
+          3, 
+          '#FF007F', 
+          'circle'
+        );
+      }
+      
+      addVibePoints(777);
+    }
+
+    // Secret #8: Window Resize Unification
+    let resizeTimestamps = [];
+    function checkWindowResizeSecret() {
+      const now = Date.now();
+      resizeTimestamps.push(now);
+      resizeTimestamps = resizeTimestamps.filter(t => now - t < 1000);
+
+      if (resizeTimestamps.length >= 3) {
+        unlockSecret("resize");
+      }
+    }
+
+    // Secret #12: Terminal Glitch button click
+    document.getElementById("glitchTrigger").addEventListener("click", () => {
+      document.body.classList.add("glitch-active");
+      unlockSecret("glitch");
+      setTimeout(() => {
+        document.body.classList.remove("glitch-active");
+      }, 2000);
+    });
+
+    // Secret #14: Idle Screen Saver automated spiral geometry
+    let saverAngle = 0;
+    function renderIdleScreenSaver(timestamp) {
+      ctx.fillStyle = "rgba(11, 12, 16, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      
+      const radius = 80 + Math.sin(timestamp / 1000) * 60;
+      const x = cx + Math.cos(saverAngle) * radius;
+      const y = cy + Math.sin(saverAngle * 1.5) * radius;
+
+      spawnParticle(
+        x, 
+        y, 
+        (Math.random() - 0.5) * 2, 
+        (Math.random() - 0.5) * 2, 
+        2, 
+        `hsl(${(timestamp / 10) % 360}, 100%, 50%)`, 
+        'circle'
+      );
+
+      saverAngle += 0.08;
+    }
+
+    // Secret #18: Trophy Hall Trails check
+    document.getElementById("shadowTrailCheckbox").addEventListener("change", (e) => {
+      state.longTrails = !!e.target.checked;
+      saveState();
+      unlockSecret("trailTrophy", true);
+      
+      if (state.longTrails) {
+        triggerDexterSpeak("Extended canvas trails enabled, human.", "smug");
+      } else {
+        triggerDexterSpeak("Canvas trails reset to standard coordinates.", "neutral");
+      }
+    });
+
+    // Secret #19: Purge progress timer countdown on reset hover
+    let resetHoverTimer = null;
+    let resetSecondsRemaining = 3;
+    const resetBtn = document.getElementById("resetBtn");
+
+    resetBtn.addEventListener("mouseenter", () => {
+      unlockSecret("resetHover", true);
+      resetSecondsRemaining = 3;
+      resetBtn.innerText = `RE-IGNITING SYSTEM IN ${resetSecondsRemaining}...`;
+      
+      triggerDexterSpeak("Safety sequence triggered. Do the smaller, uglier fix first. It will actually work, human.", "annoyed");
+
+      resetHoverTimer = setInterval(() => {
+        resetSecondsRemaining--;
+        if (resetSecondsRemaining <= 0) {
+          clearInterval(resetHoverTimer);
+          purgeProgress();
+        } else {
+          resetBtn.innerText = `RE-IGNITING SYSTEM IN ${resetSecondsRemaining}...`;
+        }
+      }, 1000);
+    });
+
+    resetBtn.addEventListener("mouseleave", () => {
+      clearInterval(resetHoverTimer);
+      resetBtn.innerText = "RESET PROGRESS";
+    });
+
+    function purgeProgress() {
+      localStorage.removeItem("vibe_coding_kit_state");
+      window.location.reload();
+    }
+
+    // INITIALIZATION PIPELINE
+    if (typeof DEXTER_IMAGES !== 'undefined') {
+      document.getElementById("sanctuaryAvatar").src = DEXTER_IMAGES.neutral;
+      document.getElementById("modalAvatar").src = DEXTER_IMAGES.neutral;
+      document.getElementById("dexterAvatar").src = DEXTER_IMAGES.neutral;
+    }
+    loadState();
+    triggerDexterSpeak("Listen up, human, because I am only saying this once. Complete minigames to unlock advanced developer portals. Speaking feels optional; accuracy is not.", "neutral");
+
+  </script>
+</body>
+</html>
