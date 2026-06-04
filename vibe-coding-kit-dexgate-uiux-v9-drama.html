@@ -740,6 +740,55 @@ function dexGoodMove(){ const now=performance.now(); if(now<_dexReactCooldown) r
 function dexBadMove(){ const now=performance.now(); if(now<_dexReactCooldown) return; _dexReactCooldown=now+1200; dexExpress('unimpressed'); }
 const DEX_WIN_LINES=['Adequate.','I tolerate this.','You earned that one.','Acceptable.','Fine. Moving on.','That was almost competent.'];
 function dexWinLine(){ return DEX_WIN_LINES[Math.floor(Math.random()*DEX_WIN_LINES.length)]; }
+/* --- Tool recommendation: 5 questions, mapped to pages 1-5 --- */
+const REC_QUESTIONS=[
+  {page:'start', q:"What's your actual constraint here?", opts:[
+    {k:'A', t:'Budget is tight. Free or very cheap is essential.'},
+    {k:'B', t:'I have money. Paying for quality is fine.'},
+    {k:'C', t:'I want to see what is possible first before spending.'},
+    {k:'D', t:'I need something predictable for a team (budgeting matters).'}]},
+  {page:'tooling', q:"What are you building with this AI?", opts:[
+    {k:'A', t:'Mostly talking to it, getting ideas and feedback.'},
+    {k:'B', t:'Code and technical problem-solving.'},
+    {k:'C', t:'Long documents, research, analysis.'},
+    {k:'D', t:'Something collaborative — multiple people using it together.'}]},
+  {page:'pricing', q:"How much do you care about privacy?", opts:[
+    {k:'A', t:'Not at all. Use my data however.'},
+    {k:'B', t:'Somewhat. I would prefer a company that is not Google or OpenAI.'},
+    {k:'C', t:'Very much. I want to know what happens to my conversations.'},
+    {k:'D', t:'Extremely. I need guarantees.'}]},
+  {page:'beginner', q:"What's your technical comfort level?", opts:[
+    {k:'A', t:'I am not technical. I just want something that works in a browser.'},
+    {k:'B', t:'I can follow instructions but do not want to code.'},
+    {k:'C', t:'I can write some code if I need to.'},
+    {k:'D', t:'I am comfortable with APIs and integrations.'}]},
+  {page:'linux', q:"What would actually make you use this?", opts:[
+    {k:'A', t:'A good free option I can share with friends.'},
+    {k:'B', t:'Something that works seamlessly on my phone and Chromebook.'},
+    {k:'C', t:'The smartest AI available, even if it costs.'},
+    {k:'D', t:'A tool designed for collaboration and teams.'}]}
+];
+const REC_PAGE_TO_Q={start:'q1',tooling:'q2',pricing:'q3',beginner:'q4',linux:'q5'};
+const REC_SCORE={
+  q1:{A:{idx:2}, B:{claude:2}, C:{idx:1,claude:1}, D:{idx:2}},
+  q2:{A:{claude:2}, B:{claude:2,codex:1}, C:{claude:2}, D:{idx:2}},
+  q3:{A:{codex:1}, B:{claude:2}, C:{claude:2}, D:{claude:2}},
+  q4:{A:{idx:2}, B:{idx:1,claude:1}, C:{claude:1,codex:1}, D:{claude:1,codex:1}},
+  q5:{A:{idx:2}, B:{idx:1,claude:1}, C:{claude:2}, D:{idx:2}}
+};
+function computeRecommendation(answers){
+  const score={idx:0,claude:0,codex:0};
+  Object.keys(REC_SCORE).forEach(q=>{
+    const pick=answers&&answers[q]; if(!pick) return;
+    const add=REC_SCORE[q][pick]||{};
+    Object.keys(add).forEach(tool=>{ score[tool]+=add[tool]; });
+  });
+  const order=['idx','claude','codex'];
+  let best=order[0];
+  order.forEach(t=>{ if(score[t]>score[best]) best=t; });
+  return {winner:best, score:score};
+}
+window.__computeRecommendation=computeRecommendation;
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
