@@ -115,7 +115,8 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
     <div class="welcomeHero">
       <div class="welcomeCopy">
         <div class="eyebrow">Welcome Briefing</div>
-        <h1 style="margin:.55rem 0 .5rem">DexGate Academy: Learn coding tools and projects through games.</h1>
+        <h1 style="margin:.55rem 0 .5rem" class="glow-text">You're here. I noticed.</h1>
+        <p class="small" style="margin:0 0 .5rem;opacity:.85">DexGate Academy. Six gates, six lessons. Don't embarrass us.</p>
         <p class="lede">Each page has a short game gate to unlock practical content. Dexter guides you through tools you can actually use on a Chromebook, beginner-friendly projects, and Linux CLI basics. Touch-first design, real gameplay, no walls.</p>
         <div class="welcomeChecklist">
           <div class="check"><div class="checkDot"></div><div><b>How it works</b><div class="small">Each page has a short game. Clear the game to unlock the actual page content.</div></div></div>
@@ -737,6 +738,8 @@ const PAGE_EXPRESSION={start:'neutral',tooling:'neutral',pricing:'unimpressed',b
 let _dexReactCooldown=0;
 function dexGoodMove(){ const now=performance.now(); if(now<_dexReactCooldown) return; _dexReactCooldown=now+1200; dexExpress('smug'); }
 function dexBadMove(){ const now=performance.now(); if(now<_dexReactCooldown) return; _dexReactCooldown=now+1200; dexExpress('unimpressed'); }
+const DEX_WIN_LINES=['Adequate.','I tolerate this.','You earned that one.','Acceptable.','Fine. Moving on.','That was almost competent.'];
+function dexWinLine(){ return DEX_WIN_LINES[Math.floor(Math.random()*DEX_WIN_LINES.length)]; }
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
