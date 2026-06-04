@@ -481,7 +481,7 @@ const proProjects=[
   ['Regex Translator','Explain regex patterns in plain English.'],
   ['Offline Personal Wiki','Markdown, backlinks, and search index.']
 ];
-function load(){ try{ return Object.assign({welcomeSeen:false,gates:{},secrets:[],title:'Vibe Coding Kit',sound:false,longTrails:false,lastExpression:'neutral',answers:{},recommendation:null}, (function(){try{var v6=JSON.parse(localStorage.getItem(STORE)||'null'); if(v6) return v6; var v5=JSON.parse(localStorage.getItem('dexgate_academy_state_v5')||'{}'); return v5;}catch(e){return {};}})() ); }catch(e){ return {welcomeSeen:false,gates:{},secrets:[],title:'Vibe Coding Kit',sound:false,longTrails:false,lastExpression:'neutral',answers:{},recommendation:null}; } }
+function load(){ try{ return Object.assign({welcomeSeen:false,gates:{},secrets:[],title:'Vibe Coding Kit',sound:false,longTrails:false,lastExpression:'neutral',answers:{},recommendation:null,scanlines:false}, (function(){try{var v6=JSON.parse(localStorage.getItem(STORE)||'null'); if(v6) return v6; var v5=JSON.parse(localStorage.getItem('dexgate_academy_state_v5')||'{}'); return v5;}catch(e){return {};}})() ); }catch(e){ return {welcomeSeen:false,gates:{},secrets:[],title:'Vibe Coding Kit',sound:false,longTrails:false,lastExpression:'neutral',answers:{},recommendation:null,scanlines:false}; } }
 let state=load(); let activePage='start'; let activeGame=null; let headerClicks=0,lastHeaderClick=0, resizeTimes=[], idleTimer=0,idle=false, matrixUntil=0; let audioCtx=null; let resetInt=null, resetLeft=4; let keyAssist=false; let totalSecretsTriggered=0;
 const games={};
 function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
