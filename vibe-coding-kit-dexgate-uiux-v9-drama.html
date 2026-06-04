@@ -96,6 +96,10 @@ body.overclock{--cyan:#fff;--pink:#ff5e73;--line:#d7dbe6;--line2:#fff;--bg:#100f
   background-size:480px 480px;animation:dramaDrift 60s linear infinite;}
 @keyframes dramaDrift{from{transform:translateY(0);}to{transform:translateY(25%);}}
 .topbar,.wrap{position:relative;z-index:1;}
+/* --- Phase 1: scanlines (toggleable) --- */
+body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.10) 3px);
+  mix-blend-mode:overlay;}
 </style>
 </head>
 <body>
@@ -164,7 +168,7 @@ body.overclock{--cyan:#fff;--pink:#ff5e73;--line:#d7dbe6;--line2:#fff;--bg:#100f
       <div class="stat">Pages <b id="gateCount">0/6</b></div>
       <div class="stat">Secrets <b id="secretCount">0/20</b></div>
       <button class="btnGhost" id="soundBtn">Sound: Off</button>
-      <button class="btnIcon" id="glitchBtn">⚠</button>
+      <button class="btnIcon" id="scanBtn" title="Toggle scanlines">▤</button><button class="btnIcon" id="glitchBtn">⚠</button>
       <button class="btnDanger" id="resetBtn">Reset</button>
     </div>
   </div>
@@ -494,7 +498,7 @@ function renderTrophies(){ const box=$('#trophies'); box.innerHTML=''; trophies.
 function renderNav(){ const nav=$('#nav'); nav.innerHTML=''; pageDefs.forEach((p,i)=>{ const b=document.createElement('button'); b.className=(p.id===activePage?'active ':'')+(state.gates[p.id]?'done ':'')+(p.elastic?'elastic ':''); b.dataset.page=p.id; b.innerHTML='<span class="num">0'+(i+1)+'</span><span><span class="label">'+p.label+'</span><br><span class="small">'+p.gate+'</span></span><span class="gate">'+(state.gates[p.id]?'open':'locked')+'</span>'; b.addEventListener('click',()=>switchPage(p.id)); if(p.id==='linux'){ b.addEventListener('mouseenter',()=>unlockSecret('bounce')); b.addEventListener('pointerdown',()=>unlockSecret('bounce')); } nav.appendChild(b); }); }
 function renderContentLocks(){ $$('[data-content]').forEach(el=>{ const id=el.dataset.content; el.classList.toggle('locked', !state.gates[id]); if(state.gates[id]) setOverlayHidden(id,true); }); }
 function switchPage(id){ activePage=id; $$('.page').forEach(p=>p.classList.toggle('active', p.id==='page-'+id)); renderNav(); const def=pageDefs.find(p=>p.id===id); $('#currentPageStatus').textContent=def?def.label:id; $('#currentGateStatus').textContent=state.gates[id]?'Gate open. Content available.':'Locked until you clear '+(def?def.gate:'the gate')+'.'; if(!state.gates[id]) speak((def?def.gate:'Gate')+' is waiting. Beat it first if you want the page body.','unimpressed'); window.scrollTo({top:0,behavior:'smooth'}); }
-function render(){ $('#appTitle').textContent=state.title; $('#titleInput').value=state.title; setDexImage(state.lastExpression||'neutral','dexImage'); setDexImage('neutral','logoDexImg'); setDexImage('neutral','welcomeDex1'); setDexImage('smug','welcomeDex2'); setDexImage('unimpressed','welcomeDex3'); renderNav(); renderContentLocks(); renderTrophies(); updateProgress(); if(state.welcomeSeen) $('#welcomeOverlay').classList.remove('show'); }
+function render(){ $('#appTitle').textContent=state.title; $('#titleInput').value=state.title; setDexImage(state.lastExpression||'neutral','dexImage'); setDexImage('neutral','logoDexImg'); setDexImage('neutral','welcomeDex1'); applyScanlines(); setDexImage('smug','welcomeDex2'); setDexImage('unimpressed','welcomeDex3'); renderNav(); renderContentLocks(); renderTrophies(); updateProgress(); if(state.welcomeSeen) $('#welcomeOverlay').classList.remove('show'); }
 function beep(freq=520,duration=.05,type='sine'){ if(!state.sound) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.type=type; osc.frequency.value=freq; gain.gain.value=.02; osc.connect(gain).connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime+duration); }catch(e){} }
 function resizeCanvas(c){ const r=c.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2); c.width=Math.max(320,Math.floor(r.width*dpr)); c.height=Math.max(220,Math.floor(r.height*dpr)); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
 function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); }
@@ -713,6 +717,8 @@ let idleFrame=0; function idleLoop(){ idleTimer += 1/60; if(idleTimer>30 && !idl
 ['pointerdown','pointermove','keydown','scroll'].forEach(ev=>window.addEventListener(ev,()=>{ idleTimer=0; if(idle){ idle=false; speak(lines.reengage,'correct'); } }, true));
 /* === DRAMA-JS-START === */
 /* New drama functions are inserted between these markers. */
+function applyScanlines(){ document.body.classList.toggle('scanlines', !!state.scanlines); }
+$('#scanBtn').addEventListener('click', ()=>{ state.scanlines=!state.scanlines; save(); applyScanlines(); });
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
