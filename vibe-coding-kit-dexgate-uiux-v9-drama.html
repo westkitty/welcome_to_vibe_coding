@@ -100,6 +100,11 @@ body.overclock{--cyan:#fff;--pink:#ff5e73;--line:#d7dbe6;--line2:#fff;--bg:#100f
 body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;
   background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.10) 3px);
   mix-blend-mode:overlay;}
+/* --- Phase 2: Dexter pop on expression change --- */
+.dexFrame{transition:box-shadow .3s ease;box-shadow:var(--glow-cyan);}
+.dex-pop{animation:dexPop .4s ease;}
+@keyframes dexPop{0%{transform:scale(.92);}55%{transform:scale(1.05);}100%{transform:scale(1);}}
+.logoDex{box-shadow:0 0 18px rgba(0,229,255,.35) !important;}
 </style>
 </head>
 <body>
@@ -497,7 +502,7 @@ function unlockGate(page,gameName,fast=false){ if(!state.gates[page]){ state.gat
 function renderTrophies(){ const box=$('#trophies'); box.innerHTML=''; trophies.forEach(([id,name,desc])=>{ const d=document.createElement('div'); d.className='trophy'+(state.secrets.includes(id)?' done':''); d.innerHTML='<b>'+name+'</b><div class="small">'+(state.secrets.includes(id)?desc:'Locked objective')+'</div>'; box.appendChild(d); }); }
 function renderNav(){ const nav=$('#nav'); nav.innerHTML=''; pageDefs.forEach((p,i)=>{ const b=document.createElement('button'); b.className=(p.id===activePage?'active ':'')+(state.gates[p.id]?'done ':'')+(p.elastic?'elastic ':''); b.dataset.page=p.id; b.innerHTML='<span class="num">0'+(i+1)+'</span><span><span class="label">'+p.label+'</span><br><span class="small">'+p.gate+'</span></span><span class="gate">'+(state.gates[p.id]?'open':'locked')+'</span>'; b.addEventListener('click',()=>switchPage(p.id)); if(p.id==='linux'){ b.addEventListener('mouseenter',()=>unlockSecret('bounce')); b.addEventListener('pointerdown',()=>unlockSecret('bounce')); } nav.appendChild(b); }); }
 function renderContentLocks(){ $$('[data-content]').forEach(el=>{ const id=el.dataset.content; el.classList.toggle('locked', !state.gates[id]); if(state.gates[id]) setOverlayHidden(id,true); }); }
-function switchPage(id){ activePage=id; $$('.page').forEach(p=>p.classList.toggle('active', p.id==='page-'+id)); renderNav(); const def=pageDefs.find(p=>p.id===id); $('#currentPageStatus').textContent=def?def.label:id; $('#currentGateStatus').textContent=state.gates[id]?'Gate open. Content available.':'Locked until you clear '+(def?def.gate:'the gate')+'.'; if(!state.gates[id]) speak((def?def.gate:'Gate')+' is waiting. Beat it first if you want the page body.','unimpressed'); window.scrollTo({top:0,behavior:'smooth'}); }
+function switchPage(id){ activePage=id; $$('.page').forEach(p=>p.classList.toggle('active', p.id==='page-'+id)); renderNav(); const def=pageDefs.find(p=>p.id===id); $('#currentPageStatus').textContent=def?def.label:id; if(typeof dexExpress==='function') dexExpress(state.gates[id]?'smug':(PAGE_EXPRESSION[id]||'neutral')); $('#currentGateStatus').textContent=state.gates[id]?'Gate open. Content available.':'Locked until you clear '+(def?def.gate:'the gate')+'.'; if(!state.gates[id]) speak((def?def.gate:'Gate')+' is waiting. Beat it first if you want the page body.','unimpressed'); window.scrollTo({top:0,behavior:'smooth'}); }
 function render(){ $('#appTitle').textContent=state.title; $('#titleInput').value=state.title; setDexImage(state.lastExpression||'neutral','dexImage'); setDexImage('neutral','logoDexImg'); setDexImage('neutral','welcomeDex1'); applyScanlines(); setDexImage('smug','welcomeDex2'); setDexImage('unimpressed','welcomeDex3'); renderNav(); renderContentLocks(); renderTrophies(); updateProgress(); if(state.welcomeSeen) $('#welcomeOverlay').classList.remove('show'); }
 function beep(freq=520,duration=.05,type='sine'){ if(!state.sound) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.type=type; osc.frequency.value=freq; gain.gain.value=.02; osc.connect(gain).connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime+duration); }catch(e){} }
 function resizeCanvas(c){ const r=c.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2); c.width=Math.max(320,Math.floor(r.width*dpr)); c.height=Math.max(220,Math.floor(r.height*dpr)); const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return ctx; }
@@ -719,6 +724,16 @@ let idleFrame=0; function idleLoop(){ idleTimer += 1/60; if(idleTimer>30 && !idl
 /* New drama functions are inserted between these markers. */
 function applyScanlines(){ document.body.classList.toggle('scanlines', !!state.scanlines); }
 $('#scanBtn').addEventListener('click', ()=>{ state.scanlines=!state.scanlines; save(); applyScanlines(); });
+/* Dexter expression engine: one place to drive every Dexter <img>. */
+const DEX_TARGETS=['dexImage','logoDexImg'];
+function dexExpress(expression){
+  const key=DEXTER_IMAGES[expression]?expression:'neutral';
+  state.lastExpression=key; save();
+  DEX_TARGETS.forEach(id=>setDexImage(key,id));
+  const frame=document.querySelector('.dexFrame');
+  if(frame){ frame.classList.remove('dex-pop'); void frame.offsetWidth; frame.classList.add('dex-pop'); }
+}
+const PAGE_EXPRESSION={start:'neutral',tooling:'neutral',pricing:'unimpressed',beginner:'friendly',linux:'neutral',pro:'annoyed'};
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
