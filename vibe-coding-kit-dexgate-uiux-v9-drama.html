@@ -539,7 +539,7 @@ function FloppyDex(id){
   function flap(){ if(!run) return; ready=true; vel=-4.25; beep(510,.03); }
   function makePipe(x){ const h=g.h(); const margin=72; const gap=172; const min=margin+gap/2; const max=Math.max(min+1,h-margin-gap/2); return {x, gapY:min+Math.random()*(max-min), gap, passed:false}; }
   function resetData(){ const w=g.w(), h=g.h(); dexY=h/2; vel=0; score=0; frame=0; ready=false; pipes=[makePipe(w+120), makePipe(w+330)]; startTime=performance.now(); $('#meta-tooling').textContent='0 / '+targetScore+' gates'; }
-  function fail(){ run=false; speak('Floppy Dex crashed. The gate is forgiving now; restart and tap steadily.','annoyed'); }
+  function fail(){ run=false; if(typeof dexBadMove==='function') dexBadMove(); speak('Floppy Dex crashed. The gate is forgiving now; restart and tap steadily.','annoyed'); }
   function loop(){
     if(!run) return;
     const w=g.w(), h=g.h(), dexX=w*.24, hit=17;
@@ -718,7 +718,7 @@ $('#resetBtn').addEventListener('pointerenter',startReset); $('#resetBtn').addEv
 $$('[data-start-game]').forEach(b=>b.addEventListener('click',()=>startGame(b.dataset.startGame))); $$('[data-reset-game]').forEach(b=>b.addEventListener('click',()=>resetGame(b.dataset.resetGame)));
 $$('.content').forEach(c=>c.addEventListener('scroll',()=>unlockSecret('scrollDrift', true)));
 if(new Date().getHours()<6) unlockSecret('midnight', true);
-let idleFrame=0; function idleLoop(){ idleTimer += 1/60; if(idleTimer>30 && !idle){ idle=true; unlockSecret('screenSaver', true); speak(lines.idle,'neutral'); } if(idleFrame++%60===0 && idle && !activeGame){ setDexImage(idleFrame%120===0?'neutral':'smug','dexImage'); } requestAnimationFrame(idleLoop); } requestAnimationFrame(idleLoop);
+let idleFrame=0; function idleLoop(){ idleTimer += 1/60; if(idleTimer>30 && !idle){ idle=true; unlockSecret('screenSaver', true); if(typeof dexExpress==='function') dexExpress('bored'); speak(lines.idle,'bored'); } if(idleFrame++%60===0 && idle && !activeGame){ setDexImage(idleFrame%120===0?'neutral':'smug','dexImage'); } requestAnimationFrame(idleLoop); } requestAnimationFrame(idleLoop);
 ['pointerdown','pointermove','keydown','scroll'].forEach(ev=>window.addEventListener(ev,()=>{ idleTimer=0; if(idle){ idle=false; speak(lines.reengage,'correct'); } }, true));
 /* === DRAMA-JS-START === */
 /* New drama functions are inserted between these markers. */
@@ -734,6 +734,9 @@ function dexExpress(expression){
   if(frame){ frame.classList.remove('dex-pop'); void frame.offsetWidth; frame.classList.add('dex-pop'); }
 }
 const PAGE_EXPRESSION={start:'neutral',tooling:'neutral',pricing:'unimpressed',beginner:'friendly',linux:'neutral',pro:'annoyed'};
+let _dexReactCooldown=0;
+function dexGoodMove(){ const now=performance.now(); if(now<_dexReactCooldown) return; _dexReactCooldown=now+1200; dexExpress('smug'); }
+function dexBadMove(){ const now=performance.now(); if(now<_dexReactCooldown) return; _dexReactCooldown=now+1200; dexExpress('unimpressed'); }
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
