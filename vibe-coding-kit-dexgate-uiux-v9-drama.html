@@ -114,6 +114,13 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
 .qmodalOpts button:hover{box-shadow:var(--glow-cyan);transform:translateX(3px);border-color:var(--cyan);}
 .qmodalOpts button:active{transform:scale(.98);}
 .qmodalOpts .qk{display:inline-block;min-width:1.4em;font:800 .9rem ui-monospace,monospace;color:var(--cyan);margin-right:.4em;}
+/* --- Phase 3: recommendation page --- */
+.recGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px;}
+.recCard{transition:box-shadow .2s ease, transform .2s ease;}
+.recCard.is-pick{box-shadow:var(--glow-pink);transform:translateY(-3px);border-color:var(--pink);}
+.recPick{margin-top:16px;padding:16px;border-radius:16px;border:1px solid var(--line2);background:rgba(10,14,22,.8);white-space:pre-line;line-height:1.55;}
+.recPick:empty{display:none;}
+@media (max-width:860px){.recGrid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -408,6 +415,34 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
           <h3>Pro project vault</h3>
           <div class="projectGrid" id="proProjects"></div>
         </div>
+      </div>
+      <div class="panel content recPanel hidden" id="recPanel">
+        <h2 class="glow-text pink" style="margin:.1rem 0 .3rem">Dexter's Tool Verdict</h2>
+        <p class="small">You answered five questions. Here are the three real options, then my pick. I don't do "it depends."</p>
+        <div class="recGrid">
+          <div class="card recCard" data-tool="idx">
+            <h4 class="glow-text">Project IDX <span class="small">(Google)</span></h4>
+            <p class="small"><b>What:</b> Browser-based cloud IDE built on VS Code. Runs on any device.</p>
+            <p class="small"><b>Excels:</b> Zero setup, Chromebook-native, phone-accessible, team collaboration, generous free tier.</p>
+            <p class="small"><b>Weak:</b> Needs internet, slower than local for big projects, smaller ecosystem.</p>
+            <p class="small"><b>Price:</b> Free tier; paid from ~$10/mo; Google Cloud + Gemini billed separately.</p>
+          </div>
+          <div class="card recCard" data-tool="claude">
+            <h4 class="glow-text">Claude Code <span class="small">(Anthropic)</span></h4>
+            <p class="small"><b>What:</b> AI-first coding environment with Claude integrated directly.</p>
+            <p class="small"><b>Excels:</b> Seamless AI pair-programming, mobile-friendly, privacy-conscious, predictable per-token pricing.</p>
+            <p class="small"><b>Weak:</b> Lighter on deploy/DevOps, no built-in hosting, limited multi-user collab.</p>
+            <p class="small"><b>Price:</b> Limited free tier; ~$20/mo standard, ~$200/mo pro; per-token option.</p>
+          </div>
+          <div class="card recCard" data-tool="codex">
+            <h4 class="glow-text">OpenAI Codex <span class="small">(ChatGPT)</span></h4>
+            <p class="small"><b>What:</b> Code generation + assistant via ChatGPT/API. Not a full IDE.</p>
+            <p class="small"><b>Excels:</b> Strong code reasoning, huge community, mature API, clear explanations.</p>
+            <p class="small"><b>Weak:</b> No dedicated mobile IDE, needs a separate editor, unpredictable token cost, data-privacy concerns.</p>
+            <p class="small"><b>Price:</b> Free tier limited; Plus $20/mo; API usage-based and can spike.</p>
+          </div>
+        </div>
+        <div class="recPick glow-edge pink" id="recPick"></div>
       </div>
     </section>
   </main>
