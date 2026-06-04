@@ -121,6 +121,9 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
 .recPick{margin-top:16px;padding:16px;border-radius:16px;border:1px solid var(--line2);background:rgba(10,14,22,.8);white-space:pre-line;line-height:1.55;}
 .recPick:empty{display:none;}
 @media (max-width:860px){.recGrid{grid-template-columns:1fr;}}
+/* --- Phase 3: reveal animation --- */
+.rec-reveal{animation:recReveal .6s ease;}
+@keyframes recReveal{0%{opacity:0;transform:translateY(16px);}100%{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -869,8 +872,46 @@ function askQuestion(page, onDone){
   $('#qmodal').classList.add('show');
 }
 window.__askQuestion=askQuestion;
+const REC_TOOL_NAME={idx:'Project IDX', claude:'Claude Code', codex:'OpenAI Codex'};
+const REC_PICK_COPY={
+  idx:{ why:['You need something on a Chromebook that just works — IDX is built for exactly that.','You care about cost. The free tier covers what you need. No surprises.','Collaboration is baked in. No setup required.'],
+        next:'Go to idx.google.com, sign in with Google, create a new project.',
+        notClaude:'Claude Code: excellent for AI-assisted work, but get a dedicated IDE shipped first.',
+        notCodex:'OpenAI Codex: too expensive for exploration and needs an external editor. Not a first move.'},
+  claude:{ why:['You want the AI doing real work with you, not just autocomplete.','Predictable per-token pricing means no surprise bills.','Privacy matters to you, and you get control over your data.'],
+        next:'Open Claude Code in your browser, start a project, and let it pair with you.',
+        notIdx:'Project IDX: great Chromebook IDE, but lighter as an AI collaborator.',
+        notCodex:'OpenAI Codex: strong reasoning, but no dedicated mobile IDE and unpredictable cost.'},
+  codex:{ why:['You want the strongest raw code reasoning and a huge community.','You are comfortable wiring it into your own editor.','You are fine with usage-based pricing.'],
+        next:'Use ChatGPT for code help, and add the Codex/API integration to your editor.',
+        notIdx:'Project IDX: simpler to start, but weaker pure code reasoning.',
+        notClaude:'Claude Code: better integrated IDE experience, but you wanted maximum reasoning + ecosystem.'}
+};
+function renderPick(winner){
+  const c=REC_PICK_COPY[winner], name=REC_TOOL_NAME[winner];
+  const others=Object.keys(REC_TOOL_NAME).filter(t=>t!==winner);
+  const notLines=others.map(t=>{
+    if(winner==='idx') return t==='claude'?c.notClaude:c.notCodex;
+    if(winner==='claude') return t==='idx'?c.notIdx:c.notCodex;
+    return t==='idx'?c.notIdx:c.notClaude;
+  });
+  const txt='🎯 DEXTER’S PICK: '+name+'\n\nWhy this is your best option:\n• '+c.why.join('\n• ')+'\n\nWhat to do next:\n'+c.next+'\n\nWhy not the others:\n• '+notLines.join('\n• ');
+  $('#recPick').textContent=txt;
+  $$('#recPanel .recCard').forEach(card=>card.classList.toggle('is-pick', card.dataset.tool===winner));
+}
+function allAnswered(){ return ['q1','q2','q3','q4','q5'].every(q=>state.answers&&state.answers[q]); }
+function maybeReveal(){
+  if(!allAnswered()) return;
+  const res=computeRecommendation(state.answers);
+  state.recommendation=res.winner; save();
+  renderPick(res.winner);
+  const panel=$('#recPanel'); if(panel){ panel.classList.remove('hidden'); panel.classList.add('rec-reveal'); }
+  dexExpress('smug');
+  speak('Five questions. One answer. I picked '+REC_TOOL_NAME[res.winner]+'. You are welcome.','smug');
+}
+window.__maybeReveal=maybeReveal;
 /* === DRAMA-JS-END === */
-preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
+preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(typeof maybeReveal==='function') maybeReveal(); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
 </script>
 </body>
