@@ -133,6 +133,9 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
 .gameMeta.stage-warn{color:#ffd23f;text-shadow:0 0 8px rgba(255,210,63,.6);animation:metaPulse 1s ease-in-out infinite;}
 .gameMeta.stage-crit{color:var(--red);text-shadow:0 0 10px rgba(255,85,103,.8);animation:metaPulse .5s ease-in-out infinite;}
 @keyframes metaPulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+/* --- Phase 5: page transitions --- */
+.page.active{animation:pageIn .34s ease;}
+@keyframes pageIn{0%{opacity:0;transform:translateX(18px);}100%{opacity:1;transform:translateX(0);}}
 </style>
 </head>
 <body>
