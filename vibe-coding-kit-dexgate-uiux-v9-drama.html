@@ -105,6 +105,15 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
 .dex-pop{animation:dexPop .4s ease;}
 @keyframes dexPop{0%{transform:scale(.92);}55%{transform:scale(1.05);}100%{transform:scale(1);}}
 .logoDex{box-shadow:0 0 18px rgba(0,229,255,.35) !important;}
+/* --- Phase 3: question modal --- */
+.qmodalCard{max-width:560px;width:100%;box-shadow:var(--glow-violet),var(--shadow);}
+.qmodalOpts{display:grid;gap:10px;margin-top:14px;}
+.qmodalOpts button{text-align:left;min-height:var(--touch);border-radius:14px;border:1px solid var(--line2);
+  background:rgba(8,11,18,.7);color:var(--text);padding:12px 14px;cursor:pointer;font:inherit;
+  transition:box-shadow .15s ease, transform .12s ease, border-color .15s ease;}
+.qmodalOpts button:hover{box-shadow:var(--glow-cyan);transform:translateX(3px);border-color:var(--cyan);}
+.qmodalOpts button:active{transform:scale(.98);}
+.qmodalOpts .qk{display:inline-block;min-width:1.4em;font:800 .9rem ui-monospace,monospace;color:var(--cyan);margin-right:.4em;}
 </style>
 </head>
 <body>
@@ -153,6 +162,18 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
   </div>
 </div>
 <div class="toast" id="toast"><b id="toastTitle"></b><p id="toastText"></p></div>
+<div class="modal qmodal" id="qmodal" aria-modal="true" role="dialog" aria-labelledby="qmodalQ">
+  <div class="modalCard qmodalCard">
+    <div class="modalBody">
+      <div class="modalDex"><img id="qmodalDex" alt="Dexter" src=""></div>
+      <div style="min-width:0">
+        <div class="eyebrow">Dexter wants to know</div>
+        <h2 id="qmodalQ" class="glow-text" style="margin:.2rem 0 .2rem"></h2>
+      </div>
+    </div>
+    <div class="qmodalOpts" id="qmodalOpts"></div>
+  </div>
+</div>
 <header class="topbar" id="statsHeader">
   <div class="wrap topbarInner">
     <div>
@@ -789,6 +810,30 @@ function computeRecommendation(answers){
   return {winner:best, score:score};
 }
 window.__computeRecommendation=computeRecommendation;
+function storeAnswer(page, key){
+  const qid=REC_PAGE_TO_Q[page]; if(!qid) return;
+  state.answers=state.answers||{}; state.answers[qid]=key; save();
+}
+function askQuestion(page, onDone){
+  const def=REC_QUESTIONS.find(q=>q.page===page);
+  if(!def){ if(onDone) onDone(); return; }
+  setDexImage('neutral','qmodalDex');
+  $('#qmodalQ').textContent=def.q;
+  const box=$('#qmodalOpts'); box.textContent='';
+  def.opts.forEach(o=>{
+    const b=document.createElement('button');
+    const span=document.createElement('span'); span.className='qk'; span.textContent=o.k;
+    b.appendChild(span); b.appendChild(document.createTextNode(o.t));
+    b.addEventListener('click', ()=>{
+      storeAnswer(page, o.k);
+      $('#qmodal').classList.remove('show');
+      if(onDone) onDone();
+    });
+    box.appendChild(b);
+  });
+  $('#qmodal').classList.add('show');
+}
+window.__askQuestion=askQuestion;
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
