@@ -558,7 +558,7 @@ function updateProgress(){ const pct=(gateCount()/pageDefs.length)*100; $('#prog
 function unlockSecret(id,silent=false){ if(!state.secrets.includes(id)){ state.secrets.push(id); totalSecretsTriggered++; save(); renderTrophies(); updateProgress(); if(state.secrets.length>=7) unlockSecret('lucky7', true); if(!silent) toast('Secret: '+(trophies.find(t=>t[0]===id)||['',id])[1], lines.secret); } }
 function setOverlayHidden(id, hidden=true){ const o=$('#overlay-'+id); if(o) o.classList.toggle('hidden', hidden); const c=$('#game-'+id); const wrap=c?c.closest('.canvasWrap'):null; if(wrap) wrap.classList.toggle('isPlaying', hidden); }
 function prepareGameCanvas(id){ const c=$('#game-'+id); if(c){ resizeCanvas(c); const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); } setOverlayHidden(id,true); }
-function unlockGate(page,gameName,fast=false){ if(!state.gates[page]){ state.gates[page]=true; save(); renderContentLocks(); renderNav(); updateProgress(); $('#overlay-'+page).classList.add('hidden'); speak(gameName+' cleared. '+lines.gate,'correct'); modal('Gate cleared', 'You cleared '+gameName+' and unlocked the '+(pageDefs.find(p=>p.id===page)?.label||page)+' page.', 'correct'); if(fast) unlockSecret('flamepaw'); } switchPage(page); }
+function unlockGate(page,gameName,fast=false){ if(!state.gates[page]){ state.gates[page]=true; save(); renderContentLocks(); renderNav(); updateProgress(); $('#overlay-'+page).classList.add('hidden'); if(typeof dexExpress==='function') dexExpress('smug'); speak(gameName+' cleared. '+dexWinLine(),'smug'); if(typeof askQuestion==='function' && REC_PAGE_TO_Q[page]){ askQuestion(page, function(){ if(typeof maybeReveal==='function') maybeReveal(); }); } modal('Gate cleared', 'You cleared '+gameName+' and unlocked the '+(pageDefs.find(p=>p.id===page)?.label||page)+' page.', 'correct'); if(fast) unlockSecret('flamepaw'); } switchPage(page); }
 function renderTrophies(){ const box=$('#trophies'); box.innerHTML=''; trophies.forEach(([id,name,desc])=>{ const d=document.createElement('div'); d.className='trophy'+(state.secrets.includes(id)?' done':''); d.innerHTML='<b>'+name+'</b><div class="small">'+(state.secrets.includes(id)?desc:'Locked objective')+'</div>'; box.appendChild(d); }); }
 function renderNav(){ const nav=$('#nav'); nav.innerHTML=''; pageDefs.forEach((p,i)=>{ const b=document.createElement('button'); b.className=(p.id===activePage?'active ':'')+(state.gates[p.id]?'done ':'')+(p.elastic?'elastic ':''); b.dataset.page=p.id; b.innerHTML='<span class="num">0'+(i+1)+'</span><span><span class="label">'+p.label+'</span><br><span class="small">'+p.gate+'</span></span><span class="gate">'+(state.gates[p.id]?'open':'locked')+'</span>'; b.addEventListener('click',()=>switchPage(p.id)); if(p.id==='linux'){ b.addEventListener('mouseenter',()=>unlockSecret('bounce')); b.addEventListener('pointerdown',()=>unlockSecret('bounce')); } nav.appendChild(b); }); }
 function renderContentLocks(){ $$('[data-content]').forEach(el=>{ const id=el.dataset.content; el.classList.toggle('locked', !state.gates[id]); if(state.gates[id]) setOverlayHidden(id,true); }); }
@@ -869,7 +869,7 @@ function askQuestion(page, onDone){
     });
     box.appendChild(b);
   });
-  $('#qmodal').classList.add('show');
+  $('#qmodal').classList.add('show'); var _firstOpt=$('#qmodalOpts').querySelector('button'); if(_firstOpt) _firstOpt.focus();
 }
 window.__askQuestion=askQuestion;
 const REC_TOOL_NAME={idx:'Project IDX', claude:'Claude Code', codex:'OpenAI Codex'};
