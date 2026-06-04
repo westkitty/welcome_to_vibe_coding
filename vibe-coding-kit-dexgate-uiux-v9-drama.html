@@ -140,6 +140,12 @@ body.scanlines::after{content:"";position:fixed;inset:0;z-index:40;pointer-event
 .gateOverlay{transition:opacity .4s ease, transform .4s ease;}
 .content.unlock-glow{animation:unlockGlow .8s ease;}
 @keyframes unlockGlow{0%{box-shadow:0 0 0 rgba(0,229,255,0);}40%{box-shadow:0 0 10px rgba(0,229,255,.8),0 0 40px rgba(0,229,255,.4);}100%{box-shadow:var(--glow-cyan),var(--shadow);}}
+/* --- Phase 5: canvas tap ripple --- */
+.canvasWrap{position:relative;}
+.tapRipple{position:absolute;width:8px;height:8px;border-radius:50%;pointer-events:none;
+  transform:translate(-50%,-50%);background:rgba(0,229,255,.6);box-shadow:0 0 12px rgba(0,229,255,.8);
+  animation:tapRip .45s ease-out forwards;z-index:6;}
+@keyframes tapRip{0%{opacity:.9;transform:translate(-50%,-50%) scale(.4);}100%{opacity:0;transform:translate(-50%,-50%) scale(4);}}
 </style>
 </head>
 <body>
@@ -951,6 +957,15 @@ function screenFlash(){
   el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
 }
 window.__fxBurst=fxBurst;
+document.querySelectorAll('canvas[id^="game-"]').forEach(function(cv){
+  cv.addEventListener('pointerdown', function(e){
+    const wrap=cv.closest('.canvasWrap'); if(!wrap) return;
+    const r=cv.getBoundingClientRect();
+    const dot=document.createElement('span'); dot.className='tapRipple';
+    dot.style.left=(e.clientX-r.left)+'px'; dot.style.top=(e.clientY-r.top)+'px';
+    wrap.appendChild(dot); setTimeout(function(){dot.remove();},450);
+  });
+});
 /* === DRAMA-JS-END === */
 preloadDex(); populateProjects(); ensureGames(); render(); switchPage('start'); if(typeof maybeReveal==='function') maybeReveal(); if(!state.welcomeSeen) $('#welcomeOverlay').classList.add('show');
 })();
