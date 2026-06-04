@@ -51,6 +51,19 @@ body.overclock{--cyan:#fff;--pink:#ff5e73;--line:#d7dbe6;--line2:#fff;--bg:#100f
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
 }
+/* --- Phase 1: glow system --- */
+:root{
+  --glow-cyan:0 0 6px rgba(0,229,255,.55),0 0 18px rgba(0,229,255,.35),0 0 40px rgba(0,229,255,.18);
+  --glow-pink:0 0 6px rgba(255,0,127,.55),0 0 18px rgba(255,0,127,.35),0 0 40px rgba(255,0,127,.18);
+  --glow-violet:0 0 6px rgba(135,89,255,.55),0 0 18px rgba(135,89,255,.35),0 0 40px rgba(135,89,255,.18);
+}
+.glow-text{color:#eafcff;text-shadow:0 0 4px rgba(0,229,255,.9),0 0 12px rgba(0,229,255,.5),0 0 28px rgba(0,229,255,.3);}
+.glow-text.pink{text-shadow:0 0 4px rgba(255,0,127,.9),0 0 12px rgba(255,0,127,.5),0 0 28px rgba(255,0,127,.3);}
+.glow-edge{box-shadow:var(--glow-cyan);}
+.glow-edge.pink{box-shadow:var(--glow-pink);}
+.main h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:900;letter-spacing:.005em;text-shadow:0 0 5px rgba(0,229,255,.55),0 0 22px rgba(0,229,255,.25);}
+.gameTop h2{text-shadow:0 0 6px rgba(255,0,127,.5);}
+.welcomeCard h1{text-shadow:0 0 8px rgba(0,229,255,.6),0 0 30px rgba(135,89,255,.35);}
 </style>
 </head>
 <body>
