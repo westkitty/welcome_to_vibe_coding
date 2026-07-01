@@ -1,0 +1,45 @@
+{
+  "commands": [],
+  "duplicate_candidates": [
+    "index_pre-v9-backup.html",
+    "sibling-near-duplicate: .vibe"
+  ],
+  "fragile_files": [
+    "dexter-all-dialogue-assets/dexter-all-dialogue-assets/README.md"
+  ],
+  "git_state": {
+    "available": true,
+    "branch": "master",
+    "dirty": true,
+    "head": "0f710d900cb0a6b7b175445f44473110c6e392cb",
+    "head_subject": "fix: bug sweep \u2014 1 issue resolved",
+    "is_repo": true,
+    "remote_url": "git@github.com:westkitty/welcome_to_vibe_coding.git",
+    "repo_root": "/Users/andrew/welcome to vibe coding",
+    "staged_count": 0,
+    "tracked_modified_count": 0,
+    "untracked_count": 2
+  },
+  "identity": {
+    "name": "welcome to vibe coding",
+    "path": "/Users/andrew/welcome to vibe coding"
+  },
+  "project_type": {
+    "confidence": 0.5,
+    "evidence": [
+      "Found index.html"
+    ],
+    "purpose": "Purpose could not be inferred confidently from filesystem signals.",
+    "type": "static_html"
+  },
+  "recommended_next_actions": [
+    "Inspect the current uncommitted Git changes before making new edits.",
+    "Back up or review fragile configuration files before any risky changes.",
+    "Read `.resurrection/project_report.md` and make one bounded change at a time.",
+    "Review the generated handoff before changing code.",
+    "Review the generated handoff before changing code."
+  ],
+  "scan_timestamp": "2026-06-29T04:21:49+00:00",
+  "scanner_version": "1.1.0",
+  "secret_risks": []
+}
